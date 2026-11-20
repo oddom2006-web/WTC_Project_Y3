@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# DOM EXPRESS — Logistics Delivery Management System
+# ITEA3 EXPRESS — Logistics Delivery Management System
 
 A modern full-stack logistics and parcel delivery management system built with **Next.js 14**, **React**, **TypeScript**, and **Firebase**. The application provides role-based dashboards for customers, employees, drivers, and administrators, along with real-time order tracking, notifications, invoice generation, and multilingual support.
 
