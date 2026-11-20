@@ -1,3 +1,4 @@
+// src/locales/km.ts
 // Must contain the exact same keys as en.ts (TypeScript will error if one is missing).
 import type { TranslationKey } from './en';
 
@@ -180,16 +181,6 @@ export const km: Record<TranslationKey, string> = {
   'auth.welcome':     'ស្វាគមន៍មកកាន់ DOM Express។ក្រុមហ៊ុមដឹកជញ្ជូនឈានមុខគេនៅកម្ពុជា។',
   'auth.loginBtnLoading':     "កំពុងចូល…",
   'auth.registerBtnLoading':  "កំពុងបង្កើតគណនី…",
-  // ភ្លេចពាក្យសម្ងាត់ និងចូលគណនីតាម Google
-  'auth.forgot.link':         "ភ្លេចពាក្យសម្ងាត់?",
-  'auth.forgot.instructions': "បញ្ចូលអ៊ីមែលរបស់អ្នក ហើយយើងនឹងផ្ញើតំណភ្ជាប់ដើម្បីកំណត់ពាក្យសម្ងាត់ឡើងវិញ។",
-  'auth.forgot.sendLink':     "ផ្ញើតំណភ្ជាប់កំណត់ឡើងវិញ",
-  'auth.forgot.sending':      "កំពុងផ្ញើ…",
-  'auth.forgot.sentMessage':  "ប្រសិនបើមានគណនីសម្រាប់អ៊ីមែលនោះ តំណភ្ជាប់កំណត់ឡើងវិញកំពុងផ្ញើទៅ។ សូមពិនិត្យប្រអប់សំបុត្ររបស់អ្នក (និងប្រអប់សារឥតបានការ)។",
-  'auth.forgot.backToLogin':  "ត្រឡប់ទៅការចូលគណនី",
-  'auth.orContinueWith':      "ឬបន្តជាមួយ",
-  'auth.google':              "បន្តជាមួយ Google",
-  'auth.loggingIn': "កំពុងចូលគណនី…",
 
   // ── Toggles ──
   'toggle.lightMode': 'ពន្លឺ',
@@ -374,13 +365,6 @@ export const km: Record<TranslationKey, string> = {
 
   // customer — profile
   'customer.profile.badge': "អតិថិជន",
-  // ទាញយកវិក្កយបត្រ
-  'customer.invoice.download': "ទាញយកវិក្កយបត្រ",
-  'customer.location.togglePin':    "កំណត់ទីតាំងជាក់លាក់លើផែនទី (ស្រេចចិត្ត)",
-  'customer.location.hidePins':     "លាក់ផែនទី",
-  'customer.location.senderPin':    "ទីតាំងទទួល​កញ្ចប់",
-  'customer.location.receiverPin':  "ទីតាំងប្រគល់ជូន",
-  'customer.location.useMyLocation':"ប្រើទីតាំងបច្ចុប្បន្នរបស់ខ្ញុំ",
 
   // driver — nav / page subtitles
   'driver.nav.history':      "ប្រវត្តិការដឹកជញ្ជូន",
@@ -427,13 +411,6 @@ export const km: Record<TranslationKey, string> = {
 
   // driver — delivery history badge
   'driver.history.deliveredSuffix': "បានដឹកជញ្ជូន",
-  // driver — ផ្លូវដែលបានស្នើ (ការប៉ាន់ស្មានបន្ទាត់ត្រង់ ដោយបែងចែកតាមសាខាទិសដៅ)
-  'driver.btn.suggestedRoute':     "ផ្លូវដែលបានស្នើ",
-  'driver.route.estimatedTotal':   "ចម្ងាយផ្លូវប៉ាន់ស្មាន",
-  'driver.route.leg':              "ចម្ងាយ",
-  'driver.route.sameStop':         "ចំណតដដែល",
-  'driver.route.straightLineNote': "ការប៉ាន់ស្មានបន្ទាត់ត្រង់ បែងចែកតាមសាខាទិសដៅ — មិនមែនផ្លូវពិតតាមថ្នល់ទេ។",
-  'driver.route.noCoordsNote':     "សាខាមួយចំនួនមិនទាន់មានទីតាំង ដូច្នេះមិនអាចរៀបតាមចម្ងាយបានទេឥឡូវនេះ។",
 
   // ការទូទាត់ (កត់ត្រាតែប៉ុណ្ណោះ — មិនគិតលុយពិតទេ)
   'customer.payment.title':         "វិធីទូទាត់",

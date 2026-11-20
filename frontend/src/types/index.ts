@@ -1,4 +1,5 @@
-// this page contains all the types used in the project, so they can be imported from a single location
+// src/types/index.ts
+
 export type UserRole = 'admin' | 'driver' | 'customer' | 'employee';
 
 export type OrderStatus =
@@ -57,10 +58,6 @@ export interface Order {
   paymentMethod?: PaymentMethod;
   paymentStatus?: PaymentStatus;
   serviceType?:   ServiceType;
-  senderLat?:    number;
-  senderLng?:    number;
-  receiverLat?:  number;
-  receiverLng?:  number;
   receiverBranch?: string;
   distanceKm?:    number;
   price?:         number;

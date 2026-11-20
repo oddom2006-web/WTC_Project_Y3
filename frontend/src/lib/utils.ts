@@ -1,6 +1,5 @@
-// this file provides utility functions for formatting dates, calculating prices, and other common tasks used throughout the app.
-//  It includes functions for formatting ISO date strings, calculating great-circle distances, 
-// and computing delivery prices based on weight, distance, and service type.
+// src/lib/utils.ts
+
 export function fmtDate(iso?: string | null): string {
   if (!iso) return '–';
   try {
@@ -30,21 +29,18 @@ export function clsx(...classes: (string | undefined | null | false)[]): string 
 //                  onto one driver/truck run — cheaper since the trip cost is shared.
 export const PRICING = {
   direct: {
-    baseFee: 1.50,
-    perKg: 0.60,
-    perKm: 0.15,
+    baseFee:  1.50,
+    perKg:    0.60,
+    perKm:    0.15,
+    minPrice: 2.00,
+  },
+  consolidated: {
+    baseFee:  0.50,
+    perKg:    0.35,
+    perKm:    0.05,
     minPrice: 1.00,
   },
-
-  consolidated: {
-    baseFee: 1.00,
-    perKg: 0.35,
-    perKm: 0.005,
-    minPrice: 0.50,
-  },
 };
-
-// Price = Base Fee + (Weight × Per Kg) + (Distance × Per Km)
 
 /** Great-circle distance between two lat/lng points, in kilometers. */
 export function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -85,19 +81,4 @@ export function calculatePrice(
   price = Math.max(price, rates.minPrice);
 
   return { price: Math.round(price * 100) / 100, distanceKm: distanceKm != null ? Math.round(distanceKm * 10) / 10 : null };
-}
-
-/**
- * Firestore's setDoc()/addDoc() reject any field explicitly set to `undefined`
- * (a TypeScript-optional field is fine to omit, but not fine to include as
- * literally `undefined`). Call this on any object headed to Firestore that was
- * built with `?? undefined` / ternaries that might leave a key undefined —
- * it removes those keys entirely rather than sending them.
- */
-export function stripUndefined<T extends Record<string, any>>(obj: T): T {
-  const out = {} as T;
-  for (const k in obj) {
-    if (obj[k] !== undefined) out[k] = obj[k];
-  }
-  return out;
 }

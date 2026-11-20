@@ -1,6 +1,7 @@
+// src/hooks/index.ts
 // All React hooks that wrap Firestore calls
 'use client';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import * as fs from '@/lib/firestore';
 import type { Order, Branch, Notification, User, OrderStatus } from '@/types';
 
@@ -10,26 +11,23 @@ export function useOrders(filter?: (o: Order) => boolean) {
   const [orders,  setOrders]  = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState<string | null>(null);
-  // Captured once, at mount — matches the original hook's behavior where the
-  // filter function was only read on first render (via useCallback with [] deps).
-  const filterRef = useRef(filter);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     setLoading(true);
-    const unsub = fs.subscribeOrders(
-      data => {
-        setOrders(filterRef.current ? data.filter(filterRef.current) : data);
-        setLoading(false);
-        setError(null);
-      },
-      err => { setError(err.message); setLoading(false); }
-    );
-    return unsub;
+    setError(null);
+    try {
+      const data = await fs.getOrders(filter);
+      setOrders(data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Real-time listener keeps this current automatically — reload() is a no-op
-  // kept only so existing reload() calls elsewhere in the app don't break.
-  return { orders, loading, error, reload: () => {} };
+  useEffect(() => { load(); }, [load]);
+  return { orders, loading, error, reload: load };
 }
 
 export function useOrder(orderId: string) {
@@ -38,9 +36,7 @@ export function useOrder(orderId: string) {
 
   useEffect(() => {
     if (!orderId) return;
-    setLoading(true);
-    const unsub = fs.subscribeOrder(orderId, data => { setOrder(data); setLoading(false); });
-    return unsub;
+    fs.getOrder(orderId).then(setOrder).finally(() => setLoading(false));
   }, [orderId]);
 
   return { order, loading };
@@ -52,16 +48,15 @@ export function useBranches() {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [loading,  setLoading]  = useState(true);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     setLoading(true);
-    const unsub = fs.subscribeBranches(
-      data => { setBranches(data); setLoading(false); },
-      ()   => setLoading(false)
-    );
-    return unsub;
+    try { setBranches(await fs.getBranches()); }
+    catch (_) {}
+    finally { setLoading(false); }
   }, []);
 
-  return { branches, loading, reload: () => {} };
+  useEffect(() => { load(); }, [load]);
+  return { branches, loading, reload: load };
 }
 
 // ── NOTIFICATIONS ─────────────────────────────────────────────────────────────
@@ -71,29 +66,26 @@ export function useNotifications(uid: string) {
   const [loading,  setLoading] = useState(true);
   const [unread,   setUnread]  = useState(0);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!uid) return;
     setLoading(true);
-    const unsub = fs.subscribeNotifications(
-      uid,
-      data => {
-        setNotifs(data);
-        setUnread(data.filter(n => !n.read).length);
-        setLoading(false);
-      },
-      () => setLoading(false)
-    );
-    return unsub;
+    try {
+      const data = await fs.getNotifications(uid);
+      setNotifs(data);
+      setUnread(data.filter(n => !n.read).length);
+    } catch (_) {}
+    finally { setLoading(false); }
   }, [uid]);
 
+  useEffect(() => { load(); }, [load]);
+
   const markAllRead = async () => {
-    // Optimistic local update for snappy UI — the live listener confirms it moments later.
+    await fs.markAllNotifsRead(uid);
     setNotifs(prev => prev.map(n => ({ ...n, read: true })));
     setUnread(0);
-    await fs.markAllNotifsRead(uid);
   };
 
-  return { notifs, loading, unread, reload: () => {}, markAllRead };
+  return { notifs, loading, unread, reload: load, markAllRead };
 }
 
 // ── USERS BY ROLE ─────────────────────────────────────────────────────────────
@@ -102,15 +94,13 @@ export function useUsersByRole(role: string) {
   const [users,   setUsers]   = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     setLoading(true);
-    const unsub = fs.subscribeUsersByRole(
-      role,
-      data => { setUsers(data); setLoading(false); },
-      ()   => setLoading(false)
-    );
-    return unsub;
+    try { setUsers(await fs.getUsersByRole(role)); }
+    catch (_) {}
+    finally { setLoading(false); }
   }, [role]);
 
-  return { users, loading, reload: () => {} };
+  useEffect(() => { load(); }, [load]);
+  return { users, loading, reload: load };
 }

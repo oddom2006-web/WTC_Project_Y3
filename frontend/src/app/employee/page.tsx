@@ -1,47 +1,30 @@
 'use client';
-import dynamic from 'next/dynamic';
-const LocationPicker = dynamic(() => import('@/components/shared/LocationPicker'), {
-  ssr: false,
-  loading: () => <div style={{ height: 220, borderRadius: 10, background: 'var(--bg3)' }} />,
-});
+// src/app/employee/page.tsx
 import { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
-import { useLanguage } from '@/context/LanguageContext';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import { useRouter }     from 'next/navigation';
+import { useAuth }       from '@/context/AuthContext';
+import { useLanguage }   from '@/context/LanguageContext';
+import DashboardLayout   from '@/components/layout/DashboardLayout';
 import { StatCard, Card, Btn, Modal, EmptyState, StatusBadge, SearchBar, TableWrap, Field } from '@/components/ui';
 import { useOrders, useBranches, useUsersByRole } from '@/hooks';
-import * as fs from '@/lib/firestore';
-import { fmtDate, fmtDateTime, calculatePrice, stripUndefined } from '@/lib/utils';
-import toast from 'react-hot-toast';
+import * as fs            from '@/lib/firestore';
+import { fmtDate, fmtDateTime, calculatePrice } from '@/lib/utils';
+import toast              from 'react-hot-toast';
 import type { Order, PaymentMethod, ServiceType, User } from '@/types';
-import { STATUS_LABELS } from '@/types';
-import { PaymentBadge, PaymentStatusBadge, ServiceTypeBadge, OrderDetailBody } from '@/components/shared/OrderComponents';
-import styles from '../driver/driver.module.css'; // shares the same class vocabulary as driver/admin/customer
-import {
-  LayoutDashboard, Inbox as InboxIn, Tag, Search, Package,
-  User as UserIcon, Loader2, Eye, RefreshCw, CheckCircle,
-  Smartphone,
-  CreditCard,
-  DollarSign,
-  Rocket,
-  Building2,
-  Inbox,
-  Clock,
-  XCircle,
-  Pencil,
-} from 'lucide-react';
+import { STATUS_LABELS }  from '@/types';
+import { PaymentBadge, PaymentStatusBadge, ServiceTypeBadge, OrderDetailBody } from '../customer/page';
+import styles              from '../driver/driver.module.css'; // shares the same class vocabulary as driver/admin/customer
 
 type T = ReturnType<typeof useLanguage>['t'];
 
 function getNav(t: T) {
   return [
-    { id: 'dashboard', icon: <LayoutDashboard size={16} />, label: t('nav.dashboard') },
-    { id: 'incoming', icon: <InboxIn size={16} />, label: t('employee.nav.incoming') },
-    { id: 'pickup', icon: <Tag size={16} />, label: t('employee.nav.pickup') },
-    { id: 'lookup', icon: <Search size={16} />, label: t('employee.nav.lookup') },
-    { id: 'create', icon: <Package size={16} />, label: t('employee.nav.create') },
-    { id: 'profile', icon: <UserIcon size={16} />, label: t('nav.profile') },
+    { id:'dashboard', icon:'📊', label:t('nav.dashboard')            },
+    { id:'incoming',  icon:'📥', label:t('employee.nav.incoming')    },
+    { id:'pickup',    icon:'🏷️', label:t('employee.nav.pickup')      },
+    { id:'lookup',    icon:'🔍', label:t('employee.nav.lookup')      },
+    { id:'create',    icon:'📦', label:t('employee.nav.create')      },
+    { id:'profile',   icon:'👤', label:t('nav.profile')              },
   ];
 }
 
@@ -51,8 +34,8 @@ function daysWaiting(iso: string): number {
 
 export default function EmployeeDashboard() {
   const { user } = useAuth();
-  const router = useRouter();
-  const { t } = useLanguage();
+  const router   = useRouter();
+  const { t }    = useLanguage();
   const [section, setSection] = useState('dashboard');
   const [detailOrder, setDetailOrder] = useState<Order | null>(null);
 
@@ -65,12 +48,12 @@ export default function EmployeeDashboard() {
 
   const NAV = getNav(t);
   const titles: Record<string, [string, string]> = {
-    dashboard: [t('nav.dashboard'), `${myBranch} — ${t('employee.pgSub.dashboard')}`],
-    incoming: [t('employee.nav.incoming'), t('employee.pgSub.incoming')],
-    pickup: [t('employee.nav.pickup'), t('employee.pgSub.pickup')],
-    lookup: [t('employee.nav.lookup'), t('employee.pgSub.lookup')],
-    create: [t('employee.nav.create'), t('employee.pgSub.create')],
-    profile: [t('nav.profile'), t('employee.pgSub.profile')],
+    dashboard: [t('nav.dashboard'),             `${myBranch} — ${t('employee.pgSub.dashboard')}`],
+    incoming:  [t('employee.nav.incoming'),     t('employee.pgSub.incoming')],
+    pickup:    [t('employee.nav.pickup'),       t('employee.pgSub.pickup')],
+    lookup:    [t('employee.nav.lookup'),       t('employee.pgSub.lookup')],
+    create:    [t('employee.nav.create'),       t('employee.pgSub.create')],
+    profile:   [t('nav.profile'),               t('employee.pgSub.profile')],
   };
   const [title, sub] = titles[section] ?? [section, ''];
 
@@ -81,12 +64,12 @@ export default function EmployeeDashboard() {
         {detailOrder && <OrderDetailBody order={detailOrder} />}
       </Modal>
 
-      {section === 'dashboard' && <EmployeeDash myBranch={myBranch} onView={setDetailOrder} />}
-      {section === 'incoming' && <EmployeeIncoming myBranch={myBranch} onView={setDetailOrder} />}
-      {section === 'pickup' && <EmployeePickup myBranch={myBranch} onView={setDetailOrder} />}
-      {section === 'lookup' && <EmployeeLookup myBranch={myBranch} onView={setDetailOrder} />}
-      {section === 'create' && <EmployeeCreate myBranch={myBranch} employeeUid={user.uid} />}
-      {section === 'profile' && <EmployeeProfile user={user} />}
+      {section === 'dashboard' && <EmployeeDash    myBranch={myBranch} onView={setDetailOrder} />}
+      {section === 'incoming'  && <EmployeeIncoming myBranch={myBranch} onView={setDetailOrder} />}
+      {section === 'pickup'    && <EmployeePickup   myBranch={myBranch} onView={setDetailOrder} />}
+      {section === 'lookup'    && <EmployeeLookup   myBranch={myBranch} onView={setDetailOrder} />}
+      {section === 'create'    && <EmployeeCreate   myBranch={myBranch} employeeUid={user.uid} />}
+      {section === 'profile'   && <EmployeeProfile  user={user} />}
     </DashboardLayout>
   );
 }
@@ -96,27 +79,27 @@ function EmployeeDash({ myBranch, onView }: { myBranch: string; onView: (o: Orde
   const { t } = useLanguage();
   const { orders, loading } = useOrders();
 
-  const incoming = orders.filter(o => o.receiverBranch === myBranch && ['assigned', 'pickedup', 'transit', 'outfordelivery'].includes(o.status));
-  const ready = orders.filter(o => o.receiverBranch === myBranch && o.status === 'arrived');
-  const today = new Date().toISOString().slice(0, 10);
-  const handedOverToday = orders.filter(o => o.receiverBranch === myBranch && o.status === 'delivered' && o.updatedAt.slice(0, 10) === today).length;
-  const createdToday = orders.filter(o => o.createdByRole === 'employee' && o.branch === myBranch && o.createdAt.slice(0, 10) === today).length;
+  const incoming = orders.filter(o => o.receiverBranch === myBranch && ['assigned','pickedup','transit','outfordelivery'].includes(o.status));
+  const ready    = orders.filter(o => o.receiverBranch === myBranch && o.status === 'arrived');
+  const today    = new Date().toISOString().slice(0, 10);
+  const handedOverToday = orders.filter(o => o.receiverBranch === myBranch && o.status === 'delivered' && o.updatedAt.slice(0,10) === today).length;
+  const createdToday    = orders.filter(o => o.createdByRole === 'employee' && o.branch === myBranch && o.createdAt.slice(0,10) === today).length;
 
   return (
     <div>
       <div className={styles.statsGrid}>
-        <StatCard label={t('employee.stat.incoming')} value={incoming.length} icon={<Inbox size={20} />} color="blue" />
-        <StatCard label={t('employee.stat.readyPickup')} value={ready.length} icon={<Tag size={20} />} color="amber" />
-        <StatCard label={t('employee.stat.handedToday')} value={handedOverToday} icon={<CheckCircle size={20} />} color="green" />
-        <StatCard label={t('employee.stat.createdToday')} value={createdToday} icon={<Package size={20} />} color="accent" />
+        <StatCard label={t('employee.stat.incoming')}      value={incoming.length}    icon="📥" color="blue"   />
+        <StatCard label={t('employee.stat.readyPickup')}   value={ready.length}       icon="🏷️" color="amber"  />
+        <StatCard label={t('employee.stat.handedToday')}   value={handedOverToday}    icon="✅" color="green"  />
+        <StatCard label={t('employee.stat.createdToday')}  value={createdToday}       icon="📦" color="accent" />
       </div>
 
-      <Card title={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Package size={20} />{t('employee.card.readyPickup')}</span>} noPad>
+      <Card title={`🏷️ ${t('employee.card.readyPickup')}`} noPad>
         <TableWrap>
           <table className={styles.table}>
             <thead><tr><th>{t('admin.th.orderId')}</th><th>{t('admin.th.receiver')}</th><th>{t('admin.field.locationTag')}</th><th>{t('admin.th.waiting')}</th><th></th></tr></thead>
             <tbody>
-              {loading ? <tr><td colSpan={5}><EmptyState icon={<Clock size={20} />} text={t('common.loading')} /></td></tr>
+              {loading ? <tr><td colSpan={5}><EmptyState icon="⏳" text={t('common.loading')} /></td></tr>
                 : ready.length ? ready.slice(0, 6).map(o => (
                   <tr key={o.orderId}>
                     <td><span className={styles.orderId}>{o.orderId}</span></td>
@@ -125,7 +108,7 @@ function EmployeeDash({ myBranch, onView }: { myBranch: string; onView: (o: Orde
                     <td className={styles.muted}>{daysWaiting(o.updatedAt)}d</td>
                     <td><Btn size="sm" variant="secondary" onClick={() => onView(o)}>{t('admin.btn.view')}</Btn></td>
                   </tr>
-                )) : <tr><td colSpan={5}><EmptyState icon={<Inbox size={20} />} text={t('employee.empty.noneReady')} /></td></tr>}
+                )) : <tr><td colSpan={5}><EmptyState icon="📭" text={t('employee.empty.noneReady')} /></td></tr>}
             </tbody>
           </table>
         </TableWrap>
@@ -142,7 +125,7 @@ function EmployeeIncoming({ myBranch, onView }: { myBranch: string; onView: (o: 
   const [locationTag, setLocationTag] = useState('');
   const [saving, setSaving] = useState(false);
 
-  const incoming = orders.filter(o => o.receiverBranch === myBranch && ['assigned', 'pickedup', 'transit', 'outfordelivery'].includes(o.status));
+  const incoming = orders.filter(o => o.receiverBranch === myBranch && ['assigned','pickedup','transit','outfordelivery'].includes(o.status));
 
   function openArrive(o: Order) { setArriving(o); setLocationTag(''); }
 
@@ -172,12 +155,12 @@ function EmployeeIncoming({ myBranch, onView }: { myBranch: string; onView: (o: 
         </div>
       </Modal>
 
-      <Card title={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Inbox size={20} />{t('employee.card.incoming')}</span>} noPad>
+      <Card title={`📥 ${t('employee.card.incoming')}`} noPad>
         <TableWrap>
           <table className={styles.table}>
             <thead><tr><th>{t('admin.th.orderId')}</th><th>{t('admin.th.tracking')}</th><th>{t('admin.th.receiver')}</th><th>{t('admin.th.phone')}</th><th>{t('common.status')}</th><th></th></tr></thead>
             <tbody>
-              {loading ? <tr><td colSpan={6}><EmptyState icon={<Clock size={20} />} text={t('common.loading')} /></td></tr>
+              {loading ? <tr><td colSpan={6}><EmptyState icon="⏳" text={t('common.loading')} /></td></tr>
                 : incoming.length ? incoming.map(o => (
                   <tr key={o.orderId}>
                     <td><span className={styles.orderId}>{o.orderId}</span></td>
@@ -187,7 +170,7 @@ function EmployeeIncoming({ myBranch, onView }: { myBranch: string; onView: (o: 
                     <td><StatusBadge status={o.status} /></td>
                     <td><Btn size="sm" onClick={() => openArrive(o)}>{t('employee.btn.markArrived')}</Btn></td>
                   </tr>
-                )) : <tr><td colSpan={6}><EmptyState icon={<Inbox size={20} />} text={t('employee.empty.noneIncoming')} /></td></tr>}
+                )) : <tr><td colSpan={6}><EmptyState icon="📭" text={t('employee.empty.noneIncoming')} /></td></tr>}
             </tbody>
           </table>
         </TableWrap>
@@ -201,9 +184,9 @@ function EmployeePickup({ myBranch, onView }: { myBranch: string; onView: (o: Or
   const { t } = useLanguage();
   const { orders, loading, reload } = useOrders();
   const [handover, setHandover] = useState<Order | null>(null);
-  const [note, setNote] = useState('');
+  const [note, setNote]         = useState('');
   const [markPaid, setMarkPaid] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving]     = useState(false);
 
   const ready = orders.filter(o => o.receiverBranch === myBranch && o.status === 'arrived');
 
@@ -230,10 +213,10 @@ function EmployeePickup({ myBranch, onView }: { myBranch: string; onView: (o: Or
           <div className={styles.infoLabel}>{t('admin.th.receiver')}</div>
           <div className={styles.infoName}>{handover?.receiverName}</div>
           <div className={styles.infoSub}>{handover?.phone}</div>
-          {handover?.locationTag && <div className={styles.infoSub} style={{ marginTop: 4 }}>📍 {handover.locationTag}</div>}
+          {handover?.locationTag && <div className={styles.infoSub} style={{marginTop:4}}>📍 {handover.locationTag}</div>}
         </div>
         {handover?.paymentMethod === 'cod' && handover.paymentStatus !== 'paid' && (
-          <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12, fontSize: 13, color: 'var(--text2)', cursor: 'pointer' }}>
+          <label style={{ display:'flex', alignItems:'center', gap:8, marginTop:12, fontSize:13, color:'var(--text2)', cursor:'pointer' }}>
             <input type="checkbox" checked={markPaid} onChange={e => setMarkPaid(e.target.checked)} />
             {t('employee.field.collectedCod')} {handover.price != null ? `$${handover.price.toFixed(2)}` : ''}
           </label>
@@ -244,29 +227,29 @@ function EmployeePickup({ myBranch, onView }: { myBranch: string; onView: (o: Or
         </div>
       </Modal>
 
-      <Card title={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Package size={20} />{t('employee.card.readyPickup')}</span>} noPad>
+      <Card title={`🏷️ ${t('employee.card.readyPickup')}`} noPad>
         <TableWrap>
           <table className={styles.table}>
             <thead><tr><th>{t('admin.th.orderId')}</th><th>{t('admin.th.receiver')}</th><th>{t('admin.th.phone')}</th><th>{t('admin.field.locationTag')}</th><th>{t('admin.th.waiting')}</th><th>{t('admin.th.payment')}</th><th></th></tr></thead>
             <tbody>
-              {loading ? <tr><td colSpan={7}><EmptyState icon={<Clock size={20} />} text={t('common.loading')} /></td></tr>
+              {loading ? <tr><td colSpan={7}><EmptyState icon="⏳" text={t('common.loading')} /></td></tr>
                 : ready.length ? ready
-                  .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
-                  .map(o => {
-                    const days = daysWaiting(o.updatedAt);
-                    return (
-                      <tr key={o.orderId}>
-                        <td><span className={styles.orderId}>{o.orderId}</span></td>
-                        <td>{o.receiverName}</td>
-                        <td className={styles.muted}>{o.phone}</td>
-                        <td className={styles.muted}>{o.locationTag ?? '—'}</td>
-                        <td><span style={{ color: days >= 2 ? 'var(--red)' : 'var(--text3)', fontWeight: days >= 2 ? 700 : 400 }}>{days <= 0 ? t('admin.th.today') : `${days}d`}</span></td>
-                        <td><PaymentStatusBadge status={o.paymentStatus} /></td>
-                        <td><Btn size="sm" onClick={() => openHandover(o)}>{t('employee.btn.handOver')}</Btn></td>
-                      </tr>
-                    );
-                  })
-                  : <tr><td colSpan={7}><EmptyState icon={<Inbox size={20} />} text={t('employee.empty.noneReady')} /></td></tr>}
+                    .sort((a,b) => a.updatedAt.localeCompare(b.updatedAt))
+                    .map(o => {
+                      const days = daysWaiting(o.updatedAt);
+                      return (
+                        <tr key={o.orderId}>
+                          <td><span className={styles.orderId}>{o.orderId}</span></td>
+                          <td>{o.receiverName}</td>
+                          <td className={styles.muted}>{o.phone}</td>
+                          <td className={styles.muted}>{o.locationTag ?? '—'}</td>
+                          <td><span style={{ color: days >= 2 ? 'var(--red)' : 'var(--text3)', fontWeight: days >= 2 ? 700 : 400 }}>{days <= 0 ? t('admin.th.today') : `${days}d`}</span></td>
+                          <td><PaymentStatusBadge status={o.paymentStatus} /></td>
+                          <td><Btn size="sm" onClick={() => openHandover(o)}>{t('employee.btn.handOver')}</Btn></td>
+                        </tr>
+                      );
+                    })
+                : <tr><td colSpan={7}><EmptyState icon="📭" text={t('employee.empty.noneReady')} /></td></tr>}
             </tbody>
           </table>
         </TableWrap>
@@ -295,7 +278,7 @@ function EmployeeLookup({ myBranch, onView }: { myBranch: string; onView: (o: Or
   }, [branchOrders, q]);
 
   return (
-    <Card title={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Search size={20} />{t('employee.card.lookup')}</span>}>
+    <Card title={`🔍 ${t('employee.card.lookup')}`}>
       <input
         className={styles.input}
         placeholder={t('employee.lookup.placeholder')}
@@ -304,27 +287,27 @@ function EmployeeLookup({ myBranch, onView }: { myBranch: string; onView: (o: Or
         style={{ marginBottom: 16 }}
         autoFocus
       />
-      {loading ? <EmptyState icon={<Clock size={20} />} text={t('common.loading')} />
-        : !q.trim() ? <EmptyState icon={<Search size={20} />} text={t('employee.lookup.prompt')} />
-          : results.length ? (
-            <TableWrap>
-              <table className={styles.table}>
-                <thead><tr><th>{t('admin.th.orderId')}</th><th>{t('admin.th.receiver')}</th><th>{t('admin.th.phone')}</th><th>{t('common.status')}</th><th>{t('admin.field.locationTag')}</th><th></th></tr></thead>
-                <tbody>
-                  {results.map(o => (
-                    <tr key={o.orderId}>
-                      <td><span className={styles.orderId}>{o.orderId}</span></td>
-                      <td>{o.receiverName}</td>
-                      <td className={styles.muted}>{o.phone}</td>
-                      <td><StatusBadge status={o.status} /></td>
-                      <td className={styles.muted}>{o.locationTag ?? '—'}</td>
-                      <td><Btn size="sm" variant="secondary" onClick={() => onView(o)}>{t('admin.btn.view')}</Btn></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </TableWrap>
-          ) : <EmptyState icon={<XCircle size={20} />} text={t('employee.lookup.noResults')} />}
+      {loading ? <EmptyState icon="⏳" text={t('common.loading')} />
+        : !q.trim() ? <EmptyState icon="🔍" text={t('employee.lookup.prompt')} />
+        : results.length ? (
+          <TableWrap>
+            <table className={styles.table}>
+              <thead><tr><th>{t('admin.th.orderId')}</th><th>{t('admin.th.receiver')}</th><th>{t('admin.th.phone')}</th><th>{t('common.status')}</th><th>{t('admin.field.locationTag')}</th><th></th></tr></thead>
+              <tbody>
+                {results.map(o => (
+                  <tr key={o.orderId}>
+                    <td><span className={styles.orderId}>{o.orderId}</span></td>
+                    <td>{o.receiverName}</td>
+                    <td className={styles.muted}>{o.phone}</td>
+                    <td><StatusBadge status={o.status} /></td>
+                    <td className={styles.muted}>{o.locationTag ?? '—'}</td>
+                    <td><Btn size="sm" variant="secondary" onClick={() => onView(o)}>{t('admin.btn.view')}</Btn></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </TableWrap>
+        ) : <EmptyState icon="📭" text={t('employee.lookup.noResults')} />}
     </Card>
   );
 }
@@ -339,15 +322,11 @@ function EmployeeCreate({ myBranch, employeeUid }: { myBranch: string; employeeU
   const [customerMode, setCustomerMode] = useState<'search' | 'guest'>('search');
   const [customerQuery, setCustomerQuery] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<User | null>(null);
-  const [senderPin, setSenderPin] = useState<{ lat: number; lng: number } | null>(null);
-  const [receiverPin, setReceiverPin] = useState<{ lat: number; lng: number } | null>(null);
-  const [showPins, setShowPins] = useState(false); // collapsed by default, keeps the form uncluttered
 
   const [form, setForm] = useState({
     guestName: '', guestPhone: '',
     receiverName: '', phone: '', address: '', receiverBranch: '',
     packageType: 'Document', weight: '0.5',
-
   });
   const [serviceType, setServiceType] = useState<ServiceType>('consolidated');
   const [payment, setPayment] = useState<PaymentMethod>('cod');
@@ -361,14 +340,11 @@ function EmployeeCreate({ myBranch, employeeUid }: { myBranch: string; employeeU
   }, [customers, customerQuery]);
 
   const fromBranch = branches.find(b => b.name === myBranch);
-  const toBranch = branches.find(b => b.name === form.receiverBranch);
-  const weightNum = parseFloat(form.weight) || 0;
-  // Pin, when set, is more precise than the branch — prefer it for pricing
-  const fromPoint = senderPin ?? fromBranch;
-  const toPoint = receiverPin ?? toBranch;
+  const toBranch   = branches.find(b => b.name === form.receiverBranch);
+  const weightNum  = parseFloat(form.weight) || 0;
   const { price, distanceKm } = useMemo(
-    () => calculatePrice(weightNum, fromPoint, toPoint, serviceType),
-    [weightNum, fromPoint, toPoint, serviceType]
+    () => calculatePrice(weightNum, fromBranch, toBranch, serviceType),
+    [weightNum, fromBranch, toBranch, serviceType]
   );
 
   async function handleSubmit(e: React.FormEvent) {
@@ -381,15 +357,13 @@ function EmployeeCreate({ myBranch, employeeUid }: { myBranch: string; employeeU
       const { orderId, trackingId } = await fs.genOrderId();
       const order = {
         orderId, trackingId,
-        customerId: customerMode === 'search' ? selectedCustomer!.uid : null,
+        customerId:   customerMode === 'search' ? selectedCustomer!.uid : null,
         customerName: customerMode === 'search' ? selectedCustomer!.username : form.guestName,
         customerPhone: customerMode === 'guest' ? form.guestPhone : undefined,
         senderName: customerMode === 'search' ? selectedCustomer!.username : form.guestName,
         receiverName: form.receiverName, phone: form.phone, address: form.address,
         packageType: form.packageType, weight: weightNum,
         branch: myBranch, receiverBranch: form.receiverBranch,
-        senderLat: senderPin?.lat, senderLng: senderPin?.lng,
-        receiverLat: receiverPin?.lat, receiverLng: receiverPin?.lng,
         serviceType,
         distanceKm: distanceKm ?? undefined, price,
         assignedDriver: null, driverName: null, driverUid: null,
@@ -401,49 +375,49 @@ function EmployeeCreate({ myBranch, employeeUid }: { myBranch: string; employeeU
         createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
         history: [{ status: 'pending' as const, time: new Date().toISOString(), note: `Created at counter — ${myBranch}` }],
       };
-      await fs.createOrder(stripUndefined(order));
+      await fs.createOrder(order);
       if (order.customerId) await fs.addNotification(order.customerId, 'Order Created', `An order was created for you at ${myBranch}. Tracking: ${trackingId}`, 'pending');
       toast.success(`Order ${orderId} created! Tracking: ${trackingId}`);
-      setForm({ guestName: '', guestPhone: '', receiverName: '', phone: '', address: '', receiverBranch: '', packageType: 'Document', weight: '0.5' });
+      setForm({ guestName:'', guestPhone:'', receiverName:'', phone:'', address:'', receiverBranch:'', packageType:'Document', weight:'0.5' });
       setSelectedCustomer(null); setCustomerQuery(''); setCollectedNow(true);
     } catch (err: any) {
       toast.error('Failed: ' + err.message);
     } finally { setLoading(false); }
   }
 
-  const SERVICE_OPTIONS: { id: ServiceType; icon: React.ReactNode; label: string }[] = [
-    { id: 'consolidated', icon: <Building2 size={20} />, label: t('customer.service.consolidated') },
-    { id: 'direct', icon: <Rocket size={20} />, label: t('customer.service.direct') },
+  const SERVICE_OPTIONS: { id: ServiceType; icon: string; label: string }[] = [
+    { id: 'consolidated', icon: '🏢', label: t('customer.service.consolidated') },
+    { id: 'direct',       icon: '🚀', label: t('customer.service.direct')       },
   ];
-  const PAYMENT_OPTIONS: { id: PaymentMethod; icon: React.ReactNode; label: string }[] = [
-    { id: 'cod', icon: <DollarSign size={20} />, label: t('customer.payment.cod') },
-    { id: 'qr', icon: <Smartphone size={20} />, label: t('customer.payment.qr') },
-    { id: 'card', icon: <CreditCard size={20} />, label: t('customer.payment.card') },
+  const PAYMENT_OPTIONS: { id: PaymentMethod; icon: string; label: string }[] = [
+    { id: 'cod',  icon: '💵', label: t('customer.payment.cod')  },
+    { id: 'qr',   icon: '📱', label: t('customer.payment.qr')   },
+    { id: 'card', icon: '💳', label: t('customer.payment.card') },
   ];
 
   return (
     <div className={styles.formCard}>
-      <Card title={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><Package size={20} />{t('employee.card.createOrder')}</span>} noPad>
+      <Card title={`📦 ${t('employee.card.createOrder')}`}>
         <form onSubmit={handleSubmit} className={styles.formGrid}>
           {/* Customer */}
           <div className={styles.colSpan2}>
-            <label className={styles.fieldLabel} style={{ display: 'block', marginBottom: 8 }}>{t('employee.field.customer')}</label>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+            <label className={styles.fieldLabel} style={{ display:'block', marginBottom:8 }}>{t('employee.field.customer')}</label>
+            <div style={{ display:'flex', gap:8, marginBottom:8 }}>
               <button type="button" onClick={() => { setCustomerMode('search'); }} style={{
-                cursor: 'pointer', padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                cursor:'pointer', padding:'6px 12px', borderRadius:8, fontSize:12, fontWeight:600,
                 border: customerMode === 'search' ? '2px solid var(--accent)' : '1px solid var(--border2)',
-                background: customerMode === 'search' ? 'var(--accent-dim)' : 'var(--bg3)', color: 'var(--text)',
+                background: customerMode === 'search' ? 'var(--accent-dim)' : 'var(--bg3)', color:'var(--text)',
               }}>{t('employee.field.searchExisting')}</button>
               <button type="button" onClick={() => { setCustomerMode('guest'); setSelectedCustomer(null); }} style={{
-                cursor: 'pointer', padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600,
+                cursor:'pointer', padding:'6px 12px', borderRadius:8, fontSize:12, fontWeight:600,
                 border: customerMode === 'guest' ? '2px solid var(--accent)' : '1px solid var(--border2)',
-                background: customerMode === 'guest' ? 'var(--accent-dim)' : 'var(--bg3)', color: 'var(--text)',
+                background: customerMode === 'guest' ? 'var(--accent-dim)' : 'var(--bg3)', color:'var(--text)',
               }}>{t('employee.field.guestEntry')}</button>
             </div>
 
             {customerMode === 'search' ? (
               selectedCustomer ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 8, background: 'var(--accent-dim)', border: '1px solid rgba(240,165,0,.3)' }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'10px 14px', borderRadius:8, background:'var(--accent-dim)', border:'1px solid rgba(240,165,0,.3)' }}>
                   <div><strong>{selectedCustomer.username}</strong> <span className={styles.muted}>· {selectedCustomer.phone ?? selectedCustomer.email}</span></div>
                   <Btn size="sm" variant="ghost" type="button" onClick={() => setSelectedCustomer(null)}>{t('common.cancel')}</Btn>
                 </div>
@@ -451,10 +425,10 @@ function EmployeeCreate({ myBranch, employeeUid }: { myBranch: string; employeeU
                 <>
                   <input className={styles.input} placeholder={t('employee.field.searchPlaceholder')} value={customerQuery} onChange={e => setCustomerQuery(e.target.value)} />
                   {custMatches.length > 0 && (
-                    <div style={{ marginTop: 6, border: '1px solid var(--border2)', borderRadius: 8, overflow: 'hidden' }}>
+                    <div style={{ marginTop:6, border:'1px solid var(--border2)', borderRadius:8, overflow:'hidden' }}>
                       {custMatches.map(c => (
                         <div key={c.uid} onClick={() => { setSelectedCustomer(c); setCustomerQuery(''); }}
-                          style={{ padding: '8px 12px', cursor: 'pointer', fontSize: 13, borderBottom: '1px solid var(--border)' }}>
+                          style={{ padding:'8px 12px', cursor:'pointer', fontSize:13, borderBottom:'1px solid var(--border)' }}>
                           <strong>{c.username}</strong> <span className={styles.muted}>· {c.phone ?? c.email}</span>
                         </div>
                       ))}
@@ -464,112 +438,74 @@ function EmployeeCreate({ myBranch, employeeUid }: { myBranch: string; employeeU
               )
             ) : (
               <div className={styles.formGrid}>
-                <Field label={t('employee.field.guestName')}><input className={styles.input} value={form.guestName} onChange={e => set('guestName', e.target.value)} /></Field>
-                <Field label={t('employee.field.guestPhone')}><input className={styles.input} placeholder="+855 xx xxx xxxx" value={form.guestPhone} onChange={e => set('guestPhone', e.target.value)} /></Field>
+                <Field label={t('employee.field.guestName')}><input className={styles.input} value={form.guestName} onChange={e=>set('guestName',e.target.value)} /></Field>
+                <Field label={t('employee.field.guestPhone')}><input className={styles.input} placeholder="+855 xx xxx xxxx" value={form.guestPhone} onChange={e=>set('guestPhone',e.target.value)} /></Field>
               </div>
             )}
           </div>
 
           {/* Service type */}
           <div className={styles.colSpan2}>
-            <label className={styles.fieldLabel} style={{ display: 'block', marginBottom: 8 }}>{t('customer.service.title')}</label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+            <label className={styles.fieldLabel} style={{ display:'block', marginBottom:8 }}>{t('customer.service.title')}</label>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:10 }}>
               {SERVICE_OPTIONS.map(opt => (
                 <button type="button" key={opt.id} onClick={() => setServiceType(opt.id)} style={{
-                  textAlign: 'left', cursor: 'pointer', borderRadius: 10, padding: '10px 14px',
+                  textAlign:'left', cursor:'pointer', borderRadius:10, padding:'10px 14px',
                   border: serviceType === opt.id ? '2px solid var(--accent)' : '1px solid var(--border2)',
                   background: serviceType === opt.id ? 'var(--accent-dim)' : 'var(--bg3)',
                 }}>
-                  <span style={{ marginRight: 6 }}>{opt.icon}</span>
-                  <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{opt.label}</span>
+                  <span style={{ marginRight:6 }}>{opt.icon}</span>
+                  <span style={{ fontWeight:600, fontSize:13, color:'var(--text)' }}>{opt.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          <Field label={t('admin.field.receiverName')}><input className={styles.input} value={form.receiverName} onChange={e => set('receiverName', e.target.value)} required /></Field>
-          <Field label={t('customer.field.receiverPhone')}><input className={styles.input} placeholder="+855 xx xxx xxxx" value={form.phone} onChange={e => set('phone', e.target.value)} required /></Field>
+          <Field label={t('admin.field.receiverName')}><input className={styles.input} value={form.receiverName} onChange={e=>set('receiverName',e.target.value)} required /></Field>
+          <Field label={t('customer.field.receiverPhone')}><input className={styles.input} placeholder="+855 xx xxx xxxx" value={form.phone} onChange={e=>set('phone',e.target.value)} required /></Field>
           <Field label={t('customer.field.senderBranch')}><input className={styles.input} value={myBranch} disabled /></Field>
           <Field label={t('customer.field.receiverBranch')}>
-            <select className={styles.input} value={form.receiverBranch} onChange={e => set('receiverBranch', e.target.value)}>
+            <select className={styles.input} value={form.receiverBranch} onChange={e=>set('receiverBranch',e.target.value)}>
               <option value="">{t('customer.field.selectBranch')}</option>
               {branches.map(b => <option key={b.id} value={b.name}>{b.name}</option>)}
             </select>
           </Field>
           <div className={styles.colSpan2}>
-            <Field label={t('customer.field.deliveryAddress')}><input className={styles.input} value={form.address} onChange={e => set('address', e.target.value)} required /></Field>
+            <Field label={t('customer.field.deliveryAddress')}><input className={styles.input} value={form.address} onChange={e=>set('address',e.target.value)} required /></Field>
           </div>
           <Field label={t('admin.field.packageType')}>
-            <select className={styles.input} value={form.packageType} onChange={e => set('packageType', e.target.value)}>
-              {['Document', 'Electronics', 'Clothing', 'Food', 'Medicine', 'Other'].map(ty => <option key={ty}>{ty}</option>)}
+            <select className={styles.input} value={form.packageType} onChange={e=>set('packageType',e.target.value)}>
+              {['Document','Electronics','Clothing','Food','Medicine','Other'].map(ty=><option key={ty}>{ty}</option>)}
             </select>
           </Field>
-          <Field label={t('customer.field.weight')}><input className={styles.input} type="number" step="0.1" min="0.1" value={form.weight} onChange={e => set('weight', e.target.value)} required /></Field>
-          <div className={styles.colSpan2}>
-            <button
-              type="button"
-              onClick={() => setShowPins(v => !v)}
-              style={{
-                fontSize: 12, color: 'var(--accent)', background: 'none', border: 'none',
-                cursor: 'pointer', padding: 0, marginBottom: showPins ? 10 : 0,
-              }}
-            >
-              📍 {showPins ? t('customer.location.hidePins') : t('customer.location.togglePin')}
-            </button>
+          <Field label={t('customer.field.weight')}><input className={styles.input} type="number" step="0.1" min="0.1" value={form.weight} onChange={e=>set('weight',e.target.value)} required /></Field>
 
-            {showPins && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-                <div>
-                  <label className={styles.fieldLabel} style={{ display: 'block', marginBottom: 6 }}>
-                    {t('customer.location.senderPin')}
-                  </label>
-                  <LocationPicker
-                    lat={senderPin?.lat} lng={senderPin?.lng}
-                    defaultCenter={fromBranch?.lat != null ? [fromBranch.lat, fromBranch.lng!] : undefined}
-                    onChange={(lat, lng) => setSenderPin({ lat, lng })}
-                    useMyLocationLabel={t('customer.location.useMyLocation')}
-                  />
-                </div>
-                <div>
-                  <label className={styles.fieldLabel} style={{ display: 'block', marginBottom: 6 }}>
-                    {t('customer.location.receiverPin')}
-                  </label>
-                  <LocationPicker
-                    lat={receiverPin?.lat} lng={receiverPin?.lng}
-                    defaultCenter={toBranch?.lat != null ? [toBranch.lat, toBranch.lng!] : undefined}
-                    onChange={(lat, lng) => setReceiverPin({ lat, lng })}
-                    useMyLocationLabel={t('customer.location.useMyLocation')}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
           <div className={styles.colSpan2}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderRadius: 10, background: 'var(--accent-dim)', border: '1px solid rgba(240,165,0,.3)' }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'14px 18px', borderRadius:10, background:'var(--accent-dim)', border:'1px solid rgba(240,165,0,.3)' }}>
               <div>
-                <div style={{ fontSize: 12, color: 'var(--text2)' }}>{t('customer.price.total')}</div>
-                <div style={{ fontSize: 12, color: 'var(--text3)', marginTop: 2 }}>{weightNum} kg{distanceKm != null ? ` · ${distanceKm} km` : ''}</div>
+                <div style={{ fontSize:12, color:'var(--text2)' }}>{t('customer.price.total')}</div>
+                <div style={{ fontSize:12, color:'var(--text3)', marginTop:2 }}>{weightNum} kg{distanceKm != null ? ` · ${distanceKm} km` : ''}</div>
               </div>
-              <div style={{ fontSize: 26, fontWeight: 800, color: 'var(--accent)' }}>${price.toFixed(2)}</div>
+              <div style={{ fontSize:26, fontWeight:800, color:'var(--accent)' }}>${price.toFixed(2)}</div>
             </div>
           </div>
 
           <div className={styles.colSpan2}>
-            <label className={styles.fieldLabel} style={{ display: 'block', marginBottom: 8 }}>{t('customer.payment.title')}</label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            <label className={styles.fieldLabel} style={{ display:'block', marginBottom:8 }}>{t('customer.payment.title')}</label>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:10 }}>
               {PAYMENT_OPTIONS.map(opt => (
                 <button type="button" key={opt.id} onClick={() => setPayment(opt.id)} style={{
-                  textAlign: 'left', cursor: 'pointer', borderRadius: 10, padding: '10px 14px',
+                  textAlign:'left', cursor:'pointer', borderRadius:10, padding:'10px 14px',
                   border: payment === opt.id ? '2px solid var(--accent)' : '1px solid var(--border2)',
                   background: payment === opt.id ? 'var(--accent-dim)' : 'var(--bg3)',
                 }}>
-                  <span style={{ marginRight: 6 }}>{opt.icon}</span>
-                  <span style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{opt.label}</span>
+                  <span style={{ marginRight:6 }}>{opt.icon}</span>
+                  <span style={{ fontWeight:600, fontSize:13, color:'var(--text)' }}>{opt.label}</span>
                 </button>
               ))}
             </div>
             {payment === 'cod' && (
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, fontSize: 13, color: 'var(--text2)', cursor: 'pointer' }}>
+              <label style={{ display:'flex', alignItems:'center', gap:8, marginTop:10, fontSize:13, color:'var(--text2)', cursor:'pointer' }}>
                 <input type="checkbox" checked={collectedNow} onChange={e => setCollectedNow(e.target.checked)} />
                 {t('employee.field.collectedNow')}
               </label>
@@ -577,7 +513,7 @@ function EmployeeCreate({ myBranch, employeeUid }: { myBranch: string; employeeU
           </div>
 
           <div className={styles.colSpan2}>
-            <Btn loading={loading} style={{ width: '100%' }}><Package size={16} /> {t('employee.btn.createOrder')} — ${price.toFixed(2)}</Btn>
+            <Btn loading={loading} style={{ width:'100%' }}>📦 {t('employee.btn.createOrder')} — ${price.toFixed(2)}</Btn>
           </div>
         </form>
       </Card>
@@ -599,20 +535,20 @@ function EmployeeProfile({ user }: { user: User }) {
 
   const profileFields = [
     [t('admin.field.fullName'), user.username],
-    [t('admin.th.email'), user.email],
-    [t('admin.th.phone'), user.phone ?? '—'],
-    [t('admin.th.branch'), user.branch ?? '—'],
+    [t('admin.th.email'),       user.email],
+    [t('admin.th.phone'),       user.phone ?? '—'],
+    [t('admin.th.branch'),      user.branch ?? '—'],
   ];
 
   return (
     <div className={styles.formCard}>
-      <Card title={<span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><UserIcon size={16} />{t('employee.card.profile')}</span>} action={<Btn size="sm" variant="secondary" onClick={() => setEditing(true)}><Pencil size={15} /> {t('common.edit')}</Btn>}>
+      <Card title={`👤 ${t('employee.card.profile')}`} action={<Btn size="sm" variant="secondary" onClick={() => setEditing(true)}>✏️ {t('common.edit')}</Btn>}>
         <div className={styles.profileHeader}>
           <div className={styles.bigAvatar}>{user.username[0].toUpperCase()}</div>
           <div>
             <div className={styles.profileName}>{user.username}</div>
             <div className={styles.profileEmail}>{user.email}</div>
-            <span className="badge badge-active" style={{ marginTop: 8, display: 'inline-flex' }}>{t('employee.profile.badge')}</span>
+            <span className="badge badge-active" style={{ marginTop:8, display:'inline-flex' }}>{t('employee.profile.badge')}</span>
           </div>
         </div>
         <div className={styles.divider} />
@@ -626,8 +562,8 @@ function EmployeeProfile({ user }: { user: User }) {
       <Modal open={editing} onClose={() => setEditing(false)} title={t('admin.modal.editProfile')}
         footer={<><Btn variant="secondary" onClick={() => setEditing(false)}>{t('common.cancel')}</Btn><Btn onClick={save}>{t('common.save')}</Btn></>}>
         <div className={styles.formGrid}>
-          <Field label={t('admin.field.fullName')}><input className={styles.input} value={form.username} onChange={e => set('username', e.target.value)} /></Field>
-          <Field label={t('admin.th.phone')}><input className={styles.input} value={form.phone} onChange={e => set('phone', e.target.value)} /></Field>
+          <Field label={t('admin.field.fullName')}><input className={styles.input} value={form.username} onChange={e=>set('username',e.target.value)} /></Field>
+          <Field label={t('admin.th.phone')}><input className={styles.input} value={form.phone} onChange={e=>set('phone',e.target.value)} /></Field>
         </div>
       </Modal>
     </div>

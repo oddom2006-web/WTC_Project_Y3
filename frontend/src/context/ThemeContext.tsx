@@ -1,5 +1,5 @@
-// this file provides a React context for managing the current theme (dark or light) and a function to toggle between them. It is used in the app to allow users to switch themes and to persist their preference in localStorage.
 'use client';
+// src/context/ThemeContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export type Theme = 'dark' | 'light';

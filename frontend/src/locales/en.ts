@@ -1,5 +1,6 @@
+// src/locales/en.ts
 // Add new keys here as you translate more of the app.
-// Keep this file the "source of truth" km.ts must mirror every key.
+// Keep this file the "source of truth" — km.ts must mirror every key.
 export const en = {
 // Homepage
   'homepage.platform':    "LOGISTICS PLATFORM",
@@ -180,16 +181,6 @@ export const en = {
   'auth.welcome':     'Welcome to DOM Express.Cambodia\'s trusted logistics platform',
   'auth.loginBtnLoading':     "Signing in…",
   'auth.registerBtnLoading':  "Creating account…",
-  // Auth — forgot password & Google sign-in
-  'auth.forgot.link':         "Forgot password?",
-  'auth.forgot.instructions': "Enter your email and we'll send you a link to reset your password.",
-  'auth.forgot.sendLink':     "Send Reset Link",
-  'auth.forgot.sending':      "Sending…",
-  'auth.forgot.sentMessage':  "If an account exists for that email, a reset link is on its way. Check your inbox (and spam folder).",
-  'auth.forgot.backToLogin':  "Back to Login",
-  'auth.orContinueWith':      "or continue with",
-  'auth.google':              "Continue with Google",
-  'auth.loggingIn': "Logging you in…",
 
   // ── Toggles ──
   'toggle.lightMode': 'Light mode',
@@ -374,13 +365,6 @@ export const en = {
 
   // Customer — profile
   'customer.profile.badge': "CUSTOMER",
-  // Invoice download
-  'customer.invoice.download': "Download Invoice",
-  'customer.location.togglePin':    "Pin exact location on map (optional)",
-  'customer.location.hidePins':     "Hide map",
-  'customer.location.senderPin':    "Pickup Location",
-  'customer.location.receiverPin':  "Drop-off Location",
-  'customer.location.useMyLocation':"Use my current location",
 
   // Driver — nav / page subtitles
   'driver.nav.history':     "Delivery History",
@@ -427,13 +411,6 @@ export const en = {
 
   // Driver — delivery history badge
   'driver.history.deliveredSuffix': "delivered",
-  // Driver — suggested route (straight-line approximation, grouped by destination branch)
-  'driver.btn.suggestedRoute':     "Suggested Route",
-  'driver.route.estimatedTotal':   "Estimated Route Distance",
-  'driver.route.leg':              "Leg",
-  'driver.route.sameStop':         "same stop",
-  'driver.route.straightLineNote': "Straight-line estimate, grouped by destination branch — not a real road route.",
-  'driver.route.noCoordsNote':     "Some branches are missing coordinates, so this can't be distance-ordered yet.",
 
   // Payment method (record-only — no real charging)
   'customer.payment.title':         "Payment Method",
@@ -548,7 +525,6 @@ export const en = {
   'admin.modal.addEmployee':    "Add Staff",
   'admin.modal.editEmployee':   "Edit Staff",
   'admin.empty.noEmployeesYet': "No branch staff yet",
-  
 } as const;
 
 export type TranslationKey = keyof typeof en;

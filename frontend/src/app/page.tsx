@@ -1,12 +1,10 @@
 'use client';
+
 import Image from "next/image";
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ThemeToggle, LanguageToggle } from '@/components/ui/Toggles';
 import { useLanguage } from '@/context/LanguageContext';
-import LoadingScreen from '@/components/ui/LoadingScreen';
-import { Truck, Lock, MapPin, } from 'lucide-react';
-import { submitContactMessage } from '@/lib/firestore';
 
 const BOOK_FORM = 'https://forms.gle/V8r7aFGMhThujFmJ8';
 
@@ -14,12 +12,12 @@ type T = ReturnType<typeof useLanguage>['t'];
 
 function getNavLinks(t: T) {
   return [
-    { href: '#home', label: t('homepage.nav.home') },
-    { href: '#about', label: t('homepage.nav.about') },
-    { href: '#services', label: t('homepage.nav.services') },
+    { href: '#home',       label: t('homepage.nav.home')     },
+    { href: '#about',      label: t('homepage.nav.about')    },
+    { href: '#services',   label: t('homepage.nav.services') },
     { href: '#estimation', label: t('homepage.nav.features') },
-    { href: '#owner', label: t('homepage.nav.story') },
-    { href: '#contact', label: t('homepage.nav.contact') },
+    { href: '#owner',      label: t('homepage.nav.story')    },
+    { href: '#contact',    label: t('homepage.nav.contact')  },
   ];
 }
 
@@ -44,12 +42,12 @@ function getFeatures(t: T) {
 
 function getGallery(t: T) {
   return [
-    { id: 'g1', src: '/assets/images/owner.jpg', alt: 'Our CEO', tag: t('homepage.gallery.ceo'), name: 'Mr. MEAS OUDOM' },
-    { id: 'g2', src: '/assets/images/branch.png', alt: 'Branch inauguration', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g2Name') },
-    { id: 'g3', src: '/assets/images/TukTuk.png', alt: 'TukTuk inauguration', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g3Name') },
-    { id: 'g4', src: '/assets/images/car.png', alt: 'Car inauguration', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g4Name') },
-    { id: 'g5', src: '/assets/images/Warehouse.png', alt: 'Warehouse inventory', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g5Name') },
-    { id: 'g6', src: '/assets/images/Truck.png', alt: 'Truck inauguration', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g6Name') },
+    { id: 'g1', src: '/assets/images/owner.jpe',      alt: 'Our CEO',             tag: t('homepage.gallery.ceo'),  name: 'ITEA3"WTCG3"' },
+    { id: 'g2', src: '/assets/images/branch.jpe',     alt: 'Branch inauguration', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g2Name') },
+    { id: 'g3', src: '/assets/images/TukTuk.jpe',     alt: 'TukTuk inauguration', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g3Name') },
+    { id: 'g4', src: '/assets/images/car.jpe',        alt: 'Car inauguration',    tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g4Name') },
+    { id: 'g5', src: '/assets/images/Warehouse.jpe',  alt: 'Warehouse inventory', tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g5Name') },
+    { id: 'g6', src: '/assets/images/Truck.jpe',      alt: 'Truck inauguration',  tag: t('homepage.gallery.dept'), name: t('homepage.gallery.g6Name') },
   ];
 }
 
@@ -77,65 +75,20 @@ function ServiceIcon({ src, fallback }: { src: string; fallback: string }) {
   return <img src={src} alt="" onError={() => setFailed(true)} />;
 }
 
-// Animates the numeric part of a stat (e.g. "25+" -> counts 0..25, keeps the "+")
-// when it scrolls into view. Values with no leading number (e.g. "24/7") just
-// render statically — there's nothing meaningful to count up to.
-function CountUpStat({ value }: { value: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [display, setDisplay] = useState('0');
-  const startedRef = useRef(false);
-
-  useEffect(() => {
-    const match = value.match(/^(\d+)(.*)$/);
-    if (!match) { setDisplay(value); return; }
-    const [, numStr, suffix] = match;
-    const target = parseInt(numStr, 10);
-    const el = ref.current;
-    if (!el) return;
-
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !startedRef.current) {
-        startedRef.current = true;
-        const duration = 900;
-        const startTime = performance.now();
-        const tick = (now: number) => {
-          const progress = Math.min((now - startTime) / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          setDisplay(Math.round(eased * target) + suffix);
-          if (progress < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      }
-    }, { threshold: 0.5 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [value]);
-
-  return <div ref={ref} className="hero-stat-num">{display}</div>;
-}
-
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [backTop, setBackTop] = useState(false);
-  const [formSent, setFormSent] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [splashDone, setSplashDone] = useState(false);
-  const { t } = useLanguage();
+  const [menuOpen,   setMenuOpen]   = useState(false);
+  const [scrolled,   setScrolled]   = useState(false);
+  const [backTop,    setBackTop]    = useState(false);
+  const [formSent,   setFormSent]   = useState(false);
+  const [sending,    setSending]    = useState(false);
+  const { t }     = useLanguage();
   const pageRef = useRef<HTMLDivElement>(null);
 
   const NAV_LINKS = getNavLinks(t);
-  const SERVICES = getServices(t);
-  const FEATURES = getFeatures(t);
-  const GALLERY = getGallery(t);
+  const SERVICES  = getServices(t);
+  const FEATURES  = getFeatures(t);
+  const GALLERY   = getGallery(t);
   const CHECK_ITEMS = getCheckItems(t);
-
-  // Brief branded entrance splash — purely cosmetic, capped short so it never
-  // feels like it's slowing the page down.
-  useEffect(() => {
-    const timer = setTimeout(() => setSplashDone(true), 700);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -146,11 +99,6 @@ export default function HomePage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-    useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [menuOpen]);
-  
   useEffect(() => {
     const root = pageRef.current;
     if (!root) return;
@@ -160,54 +108,39 @@ export default function HomePage() {
     );
     root.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, [splashDone]);
+  }, []);
 
   function closeMobileNav() { setMenuOpen(false); }
 
-
-  async function handleContact(e: React.FormEvent<HTMLFormElement>) {
+  function handleContact(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const fd = new FormData(form);
-
     setSending(true);
-    try {
-      await submitContactMessage({
-        name: String(fd.get('name') ?? ''),
-        phone: String(fd.get('phone') ?? ''),
-        email: String(fd.get('email') ?? ''),
-        message: String(fd.get('message') ?? ''),
-      });
+    setTimeout(() => {
+      setSending(false);
       setFormSent(true);
       form.reset();
       setTimeout(() => setFormSent(false), 3000);
-    } catch (err) {
-      console.error('Contact form failed:', err);
-      // optionally: setFormError(true) and show an error state
-    } finally {
-      setSending(false);
-    }
+    }, 900);
   }
 
-  if (!splashDone) return <LoadingScreen />;
-
   return (
-    <div className="home-page reveal-page" ref={pageRef}>
+    <div className="home-page" ref={pageRef}>
 
       {/* HEADER */}
       <header className={`header ${scrolled ? 'scrolled' : ''}`} id="header">
         <div className="header-inner">
-          <Link href="/home" className="nav-brand">
+          <Link href="#home" className="nav-brand">
             <div className="brand-icon">
-              <Image
-                src="/assets/images/logo.png"
-                alt="DomExpress Logo"
-                width={35}
-                height={30}
-              />
+                <Image
+                    src="/assets/images/logo.png"
+                    alt="ITEA3 EXPRESS Logo"
+                    width={35}
+                    height={30}
+                />
             </div>
             <div>
-              <div className="brand-name">DOM <span>EXPRESS</span></div>
+              <div className="brand-name">ITEA3 <span>EXPRESS</span></div>
               <div className="brand-sub">{t('homepage.platform')}</div>
             </div>
           </Link>
@@ -243,7 +176,7 @@ export default function HomePage() {
         {NAV_LINKS.map(l => (
           <a key={l.href} href={l.href} className="mobile-nav-link" onClick={closeMobileNav}>{l.label}</a>
         ))}
-        <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+       <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
           <ThemeToggle />
           <LanguageToggle />
         </div>
@@ -287,7 +220,7 @@ export default function HomePage() {
 
               <div className="hero-stats">
                 <div className="hero-stat">
-                  <CountUpStat value="25+" />
+                  <div className="hero-stat-num">25+</div>
                   <div className="hero-stat-lbl">{t('homepage.hero.branches')}</div>
                 </div>
                 <div className="hero-stat-divider" />
@@ -297,7 +230,7 @@ export default function HomePage() {
                 </div>
                 <div className="hero-stat-divider" />
                 <div className="hero-stat">
-                  <CountUpStat value="100%" />
+                  <div className="hero-stat-num">100%</div>
                   <div className="hero-stat-lbl">{t('homepage.hero.onTime')}</div>
                 </div>
               </div>
@@ -305,11 +238,11 @@ export default function HomePage() {
 
             <div className="hero-pills">
               {[
-                { icon: <MapPin size={20} />, title: t('homepage.hero.pill1Title'), sub: t('homepage.hero.pill1Sub') },
-                { icon: <Truck size={20} />, title: t('homepage.hero.pill2Title'), sub: t('homepage.hero.pill2Sub') },
-                { icon: <Lock size={20} />, title: t('homepage.hero.pill3Title'), sub: t('homepage.hero.pill3Sub') },
+                { icon: '📍', title: t('homepage.hero.pill1Title'), sub: t('homepage.hero.pill1Sub') },
+                { icon: '🚚', title: t('homepage.hero.pill2Title'), sub: t('homepage.hero.pill2Sub') },
+                { icon: '🔒', title: t('homepage.hero.pill3Title'), sub: t('homepage.hero.pill3Sub') },
               ].map(p => (
-                <div key={p.title} className="hero-pill">
+                <div key={p.icon} className="hero-pill">
                   <span className="hero-pill-icon">{p.icon}</span>
                   <div>
                     <div className="hero-pill-title">{p.title}</div>
@@ -326,8 +259,8 @@ export default function HomePage() {
           <div className="container about-grid">
             <div className="about-img-wrap reveal">
               <img
-                src="/assets/images/about-banner.jpg"
-                alt="DOM EXPRESS operations"
+                src="/assets/images/about-banner.jpe"
+                alt="ITEA3 EXPRESS operations"
                 className="about-img"
                 onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
@@ -418,7 +351,7 @@ export default function HomePage() {
           <div className="container">
             <div className="section-label">{t('homepage.owner.label')}</div>
             <h2 className="section-title">
-              MR. MEAS OUDOM <span style={{ color: 'var(--accent)' }}>(ITEA3)</span>
+              ITEA3 <span style={{ color: 'var(--accent)' }}>(WTCG3)</span>
             </h2>
             <p className="section-text" style={{ maxWidth: 760, marginBottom: 48 }}>
               {t('homepage.owner.text')}
@@ -479,16 +412,17 @@ export default function HomePage() {
                     <div className="contact-item-label">{t('homepage.contact.phone')}</div>
                     <div className="contact-item-val">
                       <a href="tel:+85587327406">+855 87 327 406</a><br />
-                      <a href="tel:+85587616990">+855 87 616 990</a>
+                      <a href="tel:+85595542956">+855 95 542 956</a><br />
+                      <a href="tel:+85515318880">+855 15 318 880</a>
                     </div>
                   </div>
                 </div>
                 <div className="contact-item reveal">
-                  <div className="contact-item-icon">✉️</div>
+                  <div className="contact-item-icon">📩</div>
                   <div>
                     <div className="contact-item-label">{t('homepage.contact.email')}</div>
                     <div className="contact-item-val">
-                      <a href="mailto:oddom2022@gmail.com">oddom2022@gmail.com</a>
+                      <a href="mailto:oddom2022@gmail.com">ITEA3@gmail.com</a>
                     </div>
                   </div>
                 </div>
@@ -512,7 +446,7 @@ export default function HomePage() {
                         <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
                       </svg>
                     </a>
-                    <a href="https://t.me/" target="_blank" rel="noreferrer" className="social-btn" title="Telegram">
+                    <a href="https://t.me/+xwsm9tXgukdhYzg1" target="_blank" rel="noreferrer" className="social-btn" title="Telegram">
                       <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
                         <path d="M21.8 2.2a1 1 0 0 0-1-.2L2.4 9.4a1 1 0 0 0 .1 1.9l4.6 1.4 1.7 5.4a1 1 0 0 0 1.7.4l2.6-2.6 4.8 3.5a1 1 0 0 0 1.6-.6l3-15.5a1 1 0 0 0-.7-1.1zM9.6 14.8l-.9 3-1-3.2 8.4-7.7-6.5 7.9z" />
                       </svg>
@@ -527,43 +461,19 @@ export default function HomePage() {
                   <div className="form-grid">
                     <div className="form-group">
                       <label className="form-label">{t('homepage.contact.yourName')}</label>
-                      <input
-                        name="name"
-                        type="text"
-                        className="form-control"
-                        placeholder="Sok Dara"
-                        required
-                      />
+                      <input type="text" className="form-control" placeholder="Sok Dara" required />
                     </div>
                     <div className="form-group">
                       <label className="form-label">{t('homepage.contact.phoneLabel')}</label>
-                      <input
-                        name="phone"
-                        type="text"
-                        className="form-control"
-                        placeholder="+855 xx xxx xxxx"
-                        required
-                      />
+                      <input type="text" className="form-control" placeholder="+855 xx xxx xxxx" required />
                     </div>
                     <div className="form-group col-2">
                       <label className="form-label">{t('homepage.contact.emailLabel')}</label>
-                      <input
-                        name="email"
-                        type="email"
-                        className="form-control"
-                        placeholder="you@example.com"
-                        required
-                      />
+                      <input type="email" className="form-control" placeholder="you@example.com" />
                     </div>
                     <div className="form-group col-2">
                       <label className="form-label">{t('homepage.contact.messageLabel')}</label>
-                      <textarea
-                        name="message"
-                        className="form-control"
-                        placeholder={t('homepage.contact.messagePlaceholder')}
-                        required
-                        rows={4}
-                      />
+                      <textarea className="form-control" placeholder={t('homepage.contact.messagePlaceholder')} required rows={4} />
                     </div>
                     <div className="form-group col-2">
                       <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={sending || formSent}>
@@ -586,15 +496,15 @@ export default function HomePage() {
             <div className="footer-brand">
               <div className="footer-logo">
                 <div className="footer-logo-icon">
-                  <Image
+                                  <Image
                     src="/assets/images/logo.png"
-                    alt="DomExpress Logo"
+                    alt="ITEA3 EXPRESS Logo"
                     width={35}
                     height={30}
-                  />
+                />
                 </div>
                 <div>
-                  <div className="footer-name">DOM <span>EXPRESS</span></div>
+                  <div className="footer-name">ITEA3 <span>EXPRESS</span></div>
                   <div className="footer-tagline">{t('homepage.footer.tagline')}</div>
                 </div>
               </div>
@@ -647,8 +557,8 @@ export default function HomePage() {
           </div>
 
           <div className="footer-bottom">
-            <p className="footer-copy">{t('homepage.footer.copyright')} <a href="#">@DOM</a></p>
-            <p className="footer-copy">+855 87 327 406 · +855 87 616 990 · oddom2022@gmail.com</p>
+            <p className="footer-copy">{t('homepage.footer.copyright')} <a href="#">@ITEA3 EXPRESS</a></p>
+            <p className="footer-copy">+855 87 327 406 · +855 15 318 880 . +855 95 542 956 · ITEA3@gmail.com</p>
           </div>
         </div>
       </footer>

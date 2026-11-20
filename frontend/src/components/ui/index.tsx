@@ -1,12 +1,10 @@
 'use client';
 // src/components/ui/index.tsx
 // All reusable UI primitives
-//this file exports a set of reusable UI components that can be used throughout the app. It includes components for status badges, stat cards, spinners, empty states, modals, form fields, buttons, search bars, cards, table wrappers, and a confirm dialog hook. Each component is designed to be flexible and customizable, allowing developers to easily integrate them into different parts of the application while maintaining a consistent look and feel.
 
 import React, { useState, useEffect, useRef } from 'react';
 import { STATUS_LABELS, type OrderStatus } from '@/types';
 import styles from './ui.module.css';
-import { Inbox } from 'lucide-react';
 
 /* ── STATUS BADGE ── */
 export function StatusBadge({ status }: { status: OrderStatus | string }) {
@@ -19,10 +17,10 @@ export function StatusBadge({ status }: { status: OrderStatus | string }) {
 
 /* ── STAT CARD ── */
 interface StatCardProps {
-    label:    string;
-    value:    string | number;
-    icon:     React.ReactNode;
-    color?:   'accent' | 'green' | 'red' | 'blue' | 'purple' | 'amber';
+  label:    string;
+  value:    string | number;
+  icon:     string;
+  color?:   'accent' | 'green' | 'red' | 'blue' | 'purple' | 'amber';
 }
 export function StatCard({ label, value, icon, color = 'accent' }: StatCardProps) {
   return (
@@ -42,7 +40,7 @@ export function Spinner({ size = 32 }: { size?: number }) {
 }
 
 /* ── EMPTY STATE ── */
-export function EmptyState({ icon = <Inbox size={28} />, text = 'No data found' }: { icon?: React.ReactNode; text?: string }) {
+export function EmptyState({ icon = '📭', text = 'No data found' }: { icon?: string; text?: string }) {
   return (
     <div className={styles.emptyState}>
       <div className={styles.emptyIcon}>{icon}</div>
@@ -147,7 +145,7 @@ export function SearchBar({ placeholder='Search…', onSearch }: { placeholder?:
 
 /* ── CARD ── */
 interface CardProps {
-  title?:    React.ReactNode;
+  title?:    string;
   action?:   React.ReactNode;
   children:  React.ReactNode;
   noPad?:    boolean;

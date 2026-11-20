@@ -1,5 +1,5 @@
-// this file provides a React context for managing the current language (English or Khmer) and a translation function. It is used in the app to allow users to switch languages and to translate text keys into the appropriate language.
 'use client';
+// src/context/LanguageContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { en } from '@/locales/en';
 import { km } from '@/locales/km';
