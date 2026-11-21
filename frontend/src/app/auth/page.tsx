@@ -86,14 +86,14 @@ export default function AuthPage() {
           <div className={styles.logoIcon}>
             <Image
               src="/assets/images/logo.png"
-              alt="DomExpress Logo"
+              alt="ITEA3 EXPRESS Logo"
               width={35}
               height={30}
             />
           </div>
 
           <div>
-            <div className={styles.logoName}>DOM EXPRESS</div>
+            <div className={styles.logoName}>ITEA3 EXPRESS</div>
             <div className={styles.logoSub}>{t('auth.platform')}</div>
           </div>
         </div>

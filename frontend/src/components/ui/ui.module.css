@@ -1,14 +1,18 @@
-/* src/components/ui/ui.module.css */
+/* src/components/ui/ui.module.css — GLASSMORPHISM */
 
 /* ── STAT CARD ── */
 .statCard {
-  background: var(--bg2); border: 1px solid var(--border);
+  background: var(--bg2);
+  border: 1px solid var(--border2);
   border-radius: var(--radius-lg); padding: 20px;
   position: relative; overflow: hidden;
-  transition: border-color .2s, transform .2s;
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  transition: border-color .2s, transform .2s, background .2s;
 }
-.statCard:hover { border-color: var(--accent); transform: translateY(-2px); }
-.statIcon { position:absolute; right:14px; top:14px; font-size:30px; opacity:.12; }
+.statCard:hover { border-color: var(--accent); background: var(--bg3); transform: translateY(-2px); }
+.statIcon { position:absolute; right:14px; top:14px; font-size:30px; opacity:.16; }
 .statLabel { font-size:11px; color:var(--text2); font-weight:600; letter-spacing:.8px; text-transform:uppercase; margin-bottom:8px; }
 .statValue { font-size:34px; font-weight:700; font-family:var(--font-mono); line-height:1; }
 .color_accent { color:var(--accent); }
@@ -33,22 +37,28 @@
   display:flex; flex-direction:column; align-items:center;
   justify-content:center; padding:56px 20px; gap:10px; color:var(--text3);
 }
-.emptyIcon { font-size:46px; opacity:.35; }
+.emptyIcon { font-size:46px; opacity:.4; }
 .emptyText { font-size:15px; }
 
 /* ── MODAL ── */
+/* The overlay is a plain dim layer. Don't blur it: a parent with backdrop-filter
+   stops the child .modal from blurring the page behind it. */
 .overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,.75);
-  backdrop-filter:blur(4px); z-index:500;
+  position:fixed; inset:0;
+  background: radial-gradient(circle at 50% 30%, rgba(10,12,22,.45), rgba(5,7,14,.72));
+  z-index:500;
   display:flex; align-items:center; justify-content:center; padding:20px;
   animation: fadeIn .18s ease;
 }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 .modal {
-  background:var(--bg2); border:1px solid var(--border2);
-  border-radius:var(--radius-lg); width:100%;
+  background: var(--glass-strong);
+  border: 1px solid var(--border2);
+  border-radius: 22px; width:100%;
   max-height:90vh; overflow-y:auto;
-  box-shadow:0 32px 80px rgba(0,0,0,.7);
+  box-shadow: 0 32px 80px rgba(0,0,0,.45), var(--glass-highlight);
+  backdrop-filter: var(--blur-strong);
+  -webkit-backdrop-filter: var(--blur-strong);
   animation: slideUp .2s ease;
 }
 @keyframes slideUp { from{transform:translateY(16px);opacity:0} to{transform:none;opacity:1} }
@@ -57,7 +67,7 @@
   display:flex; align-items:center; justify-content:space-between;
 }
 .modalTitle  { font-size:16px; font-weight:700; font-family:var(--font-mono); }
-.modalClose  { background:none; border:none; color:var(--text2); font-size:20px; cursor:pointer; padding:2px 6px; border-radius:6px; }
+.modalClose  { background:none; border:none; color:var(--text2); font-size:20px; cursor:pointer; padding:2px 6px; border-radius:8px; }
 .modalClose:hover { color:var(--text); background:var(--bg3); }
 .modalBody   { padding:24px; }
 .modalFooter { padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px; }
@@ -69,9 +79,9 @@
   background:var(--bg3); border:1px solid var(--border2);
   border-radius:var(--radius); padding:10px 14px;
   color:var(--text); font-family:var(--font); font-size:14px;
-  outline:none; transition:border-color .2s; width:100%;
+  outline:none; transition:border-color .2s, background .2s, box-shadow .2s; width:100%;
 }
-.fieldInput:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
+.fieldInput:focus { background:var(--bg4); border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
 .fieldInput::placeholder { color:var(--text3); }
 
 /* ── BUTTON ── */
@@ -83,13 +93,26 @@
 .btn:hover:not(:disabled)  { transform:translateY(-1px); }
 .btn:active:not(:disabled) { transform:translateY(0); }
 .btn:disabled              { opacity:.55; cursor:not-allowed; }
-.btn_primary  { background:var(--accent);     color:#000;        padding:10px 20px; font-size:13.5px; }
-.btn_primary:hover:not(:disabled)  { background:var(--accent2); box-shadow:0 4px 16px var(--accent-glow); }
-.btn_secondary { background:var(--bg3);   color:var(--text);  border:1px solid var(--border2); padding:10px 20px; font-size:13.5px; }
-.btn_secondary:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); }
-.btn_danger   { background:var(--red-dim);  color:var(--red);   border:1px solid rgba(239,68,68,.25); padding:10px 20px; font-size:13.5px; }
+
+/* Primary: glossy amber with an inner highlight */
+.btn_primary  {
+  background:linear-gradient(135deg, #ffc233, var(--accent)); color:#000;
+  padding:10px 20px; font-size:13.5px;
+  box-shadow:0 4px 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn_primary:hover:not(:disabled)  { background:linear-gradient(135deg, #ffd060, var(--accent2)); box-shadow:0 8px 24px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,.5); }
+
+/* Secondary / ghost: frosted glass buttons */
+.btn_secondary {
+  background:var(--bg3); color:var(--text); border:1px solid var(--border2);
+  padding:10px 20px; font-size:13.5px;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  box-shadow:var(--glass-highlight);
+}
+.btn_secondary:hover:not(:disabled) { border-color:var(--accent); color:var(--accent); background:var(--bg4); }
+.btn_danger   { background:var(--red-dim);  color:var(--red);   border:1px solid rgba(239,68,68,.3); padding:10px 20px; font-size:13.5px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
 .btn_danger:hover:not(:disabled)   { background:var(--red); color:#fff; }
-.btn_success  { background:var(--green-dim);color:var(--green); border:1px solid rgba(34,197,94,.25);  padding:10px 20px; font-size:13.5px; }
+.btn_success  { background:var(--green-dim);color:var(--green); border:1px solid rgba(34,197,94,.3);  padding:10px 20px; font-size:13.5px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
 .btn_success:hover:not(:disabled)  { background:var(--green); color:#fff; }
 .btn_ghost    { background:transparent; color:var(--text2); border:1px solid var(--border2); padding:10px 20px; font-size:13.5px; }
 .btn_ghost:hover:not(:disabled)    { color:var(--text); background:var(--bg3); }
@@ -99,16 +122,19 @@
 /* ── SEARCH BAR ── */
 .searchBar {
   background:var(--bg3); border:1px solid var(--border2);
-  border-radius:var(--radius); padding:9px 14px; color:var(--text);
-  font-size:13.5px; outline:none; width:240px; transition:border-color .2s;
+  border-radius:999px; padding:9px 16px; color:var(--text);
+  font-size:13.5px; outline:none; width:240px; transition:border-color .2s, background .2s;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
 }
-.searchBar:focus  { border-color:var(--accent); }
+.searchBar:focus  { border-color:var(--accent); background:var(--bg4); }
 .searchBar::placeholder { color:var(--text3); }
 
 /* ── CARD ── */
 .card {
-  background:var(--bg2); border:1px solid var(--border);
+  background:var(--bg2); border:1px solid var(--border2);
   border-radius:var(--radius-lg); overflow:hidden;
+  box-shadow:var(--glass-shadow), var(--glass-highlight);
+  backdrop-filter:var(--blur); -webkit-backdrop-filter:var(--blur);
 }
 .cardHeader {
   padding:16px 20px; border-bottom:1px solid var(--border);
@@ -119,3 +145,9 @@
 
 /* ── TABLE WRAP ── */
 .tableWrap { overflow-x:auto; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .card, .statCard { border-radius:14px; }
+  .modal { border-radius:18px; }
+}

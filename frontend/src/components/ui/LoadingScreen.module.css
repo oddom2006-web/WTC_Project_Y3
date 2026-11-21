@@ -1,3 +1,4 @@
+/* src/components/ui/LoadingScreen.module.css — GLASSMORPHISM */
 .overlay {
   position: fixed;
   inset: 0;
@@ -7,7 +8,11 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
-  background: var(--bg);
+  /* This screen covers the body, so it paints its own blobs */
+  background:
+    radial-gradient(40% 45% at 15% 15%, var(--blob-1), transparent 70%),
+    radial-gradient(45% 50% at 85% 85%, var(--blob-2), transparent 70%),
+    var(--bg);
   animation: domFadeIn .25s ease;
 }
 
@@ -17,6 +22,9 @@
   border-radius: 16px;
   background: var(--accent-dim);
   border: 2px solid var(--accent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px var(--accent-glow);
   display: flex;
   align-items: center;
   justify-content: center;
