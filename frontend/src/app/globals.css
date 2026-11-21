@@ -1,64 +1,107 @@
-/* src/app/globals.css */
+/* src/app/globals.css — GLASSMORPHISM THEME */
+/* NOTE: @import rules must come first or browsers ignore them */
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
+/* ── DARK (default) ── */
 :root {
-  --bg:          #0a0c10;
-  --bg2:         #111318;
-  --bg3:         #1a1d24;
-  --bg4:         #20242d;
-  --border:      #1e2229;
-  --border2:     #272c38;
+  --bg:          #070912;                    /* page base, sits under the blobs */
+
+  /* Glass surfaces: translucent white layers instead of solid greys */
+  --bg2:         rgba(255,255,255,0.055);    /* cards, panels */
+  --bg3:         rgba(255,255,255,0.080);    /* inputs, inner blocks */
+  --bg4:         rgba(255,255,255,0.120);    /* hover states */
+  --border:      rgba(255,255,255,0.09);
+  --border2:     rgba(255,255,255,0.16);
+
   --accent:      #f0a500;
   --accent2:     #e0960a;
-  --accent-dim:  rgba(240,165,0,0.10);
-  --accent-glow: rgba(240,165,0,0.22);
-  --text:        #f0f2f8;
-  --text2:       #8b90a0;
-  --text3:       #525764;
+  --accent-dim:  rgba(240,165,0,0.14);
+  --accent-glow: rgba(240,165,0,0.30);
+  --text:        #f4f6fb;
+  --text2:       #a6adc0;
+  --text3:       #7a8196;
   --green:       #22c55e;
-  --green-dim:   rgba(34,197,94,0.12);
+  --green-dim:   rgba(34,197,94,0.14);
   --red:         #ef4444;
-  --red-dim:     rgba(239,68,68,0.12);
+  --red-dim:     rgba(239,68,68,0.14);
   --blue:        #3b82f6;
-  --blue-dim:    rgba(59,130,246,0.12);
+  --blue-dim:    rgba(59,130,246,0.14);
   --purple:      #a855f7;
-  --purple-dim:  rgba(168,85,247,0.12);
+  --purple-dim:  rgba(168,85,247,0.14);
   --orange:      #f97316;
-  --orange-dim:  rgba(249,115,22,0.12);
-  --radius:      10px;
-  --radius-lg:   16px;
+  --orange-dim:  rgba(249,115,22,0.14);
+
+  /* Glass helpers */
+  --solid:           #151a29;                /* opaque colour for <option>, timeline dots */
+  --glass-strong:    rgba(14,18,32,0.72);    /* sidebar, topbar, modal, mobile nav */
+  --glass-header:    rgba(10,12,22,0.55);    /* landing header */
+  --glass-shadow:    0 8px 32px rgba(0,0,0,0.30);
+  --glass-highlight: inset 0 1px 0 rgba(255,255,255,0.10);
+  --blur:            blur(18px) saturate(140%);
+  --blur-strong:     blur(26px) saturate(160%);
+
+  /* Background blobs */
+  --blob-1: rgba(240,165,0,0.22);
+  --blob-2: rgba(59,130,246,0.24);
+  --blob-3: rgba(168,85,247,0.22);
+
+  --radius:      12px;
+  --radius-lg:   18px;
   --sidebar-w:   240px;
   --topbar-h:    60px;
   --font-mono:   'Space Mono', monospace;
   --font:        'DM Sans', sans-serif;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@300;400;500;600;700&display=swap');
-
+/* ── LIGHT ── */
 [data-theme="light"] {
-  --bg:          #f7f8fa;
-  --bg2:         #ffffff;
-  --bg3:         #f0f1f4;
-  --bg4:         #e7e9ee;
-  --border:      #e2e4ea;
-  --border2:     #d7dae2;
+  --bg:          #e9edf6;
+  --bg2:         rgba(255,255,255,0.55);
+  --bg3:         rgba(255,255,255,0.68);
+  --bg4:         rgba(255,255,255,0.85);
+  --border:      rgba(255,255,255,0.70);
+  --border2:     rgba(20,24,40,0.12);
   --accent:      #d98d00;
   --accent2:     #c17e00;
-  --accent-dim:  rgba(217,141,0,0.08);
-  --accent-glow: rgba(217,141,0,0.18);
+  --accent-dim:  rgba(217,141,0,0.12);
+  --accent-glow: rgba(217,141,0,0.26);
   --text:        #14161c;
-  --text2:       #5a5f6d;
-  --text3:       #8b90a0;
+  --text2:       #4f5565;
+  --text3:       #7a8094;
   --green:       #16a34a;
-  --green-dim:   rgba(22,163,74,0.10);
+  --green-dim:   rgba(22,163,74,0.12);
   --red:         #dc2626;
-  --red-dim:     rgba(220,38,38,0.10);
+  --red-dim:     rgba(220,38,38,0.12);
   --blue:        #2563eb;
-  --blue-dim:    rgba(37,99,235,0.10);
+  --blue-dim:    rgba(37,99,235,0.12);
   --purple:      #9333ea;
-  --purple-dim:  rgba(147,51,234,0.10);
+  --purple-dim:  rgba(147,51,234,0.12);
   --orange:      #ea580c;
-  --orange-dim:  rgba(234,88,12,0.10);
+  --orange-dim:  rgba(234,88,12,0.12);
+
+  --solid:           #ffffff;
+  --glass-strong:    rgba(255,255,255,0.78);
+  --glass-header:    rgba(255,255,255,0.60);
+  --glass-shadow:    0 8px 32px rgba(31,38,80,0.12);
+  --glass-highlight: inset 0 1px 0 rgba(255,255,255,0.90);
+
+  --blob-1: rgba(240,165,0,0.30);
+  --blob-2: rgba(59,130,246,0.22);
+  --blob-3: rgba(168,85,247,0.20);
+}
+
+/* Fallback for browsers without backdrop-filter: use near-solid surfaces */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root {
+    --bg2: #11141f; --bg3: #181d2b; --bg4: #202637;
+    --glass-strong: #0f1320; --glass-header: #0b0e18;
+  }
+  [data-theme="light"] {
+    --bg2: #ffffff; --bg3: #f0f1f4; --bg4: #e7e9ee;
+    --glass-strong: #ffffff; --glass-header: #ffffff;
+  }
 }
 
 html[lang="km"] body { font-family: 'Noto Sans Khmer', var(--font); }
@@ -73,13 +116,23 @@ body {
   overflow-x:  hidden;
   transition: background-color .2s ease, color .2s ease;
 }
+/* Colourful blobs fixed behind everything — the glass panels blur these */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(42% 46% at 10% 8%,  var(--blob-1), transparent 70%),
+    radial-gradient(46% 50% at 90% 16%, var(--blob-2), transparent 70%),
+    radial-gradient(50% 55% at 72% 96%, var(--blob-3), transparent 70%),
+    radial-gradient(36% 42% at 6% 92%,  var(--blob-2), transparent 70%);
+}
 a   { text-decoration: none; color: inherit; }
 ul  { list-style: none; }
 img { display: block; max-width: 100%; }
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar       { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
@@ -117,7 +170,6 @@ img { display: block; max-width: 100%; }
 
 /* Homepage */
 
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 /* ── BUTTONS & FORMS (from global.css, used on landing) ── */
 .home-page .btn {
@@ -326,22 +378,51 @@ img { display: block; max-width: 100%; }
 @media (max-width: 900px) { .home-page .hero-pills { display: none; } }
 
 /* ── ABOUT ── */
+/* ── ABOUT (responsive: laptop → tablet → mobile) ── */
+
+/* Laptop / desktop (default): two columns */
 .home-page .about-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 72px);      /* gap shrinks smoothly on smaller laptops */
+  align-items: center;
 }
 .home-page .about-img-wrap { position: relative; }
+
+/* aspect-ratio replaces the fixed 520px height, so the photo scales with its width */
 .home-page .about-img {
-  width: 100%; border-radius: 16px; height: 520px; object-fit: cover;
-  display: block; filter: brightness(.8) contrast(1.05);
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 4.6;
+  max-height: 560px;
+  object-fit: cover;
+  display: block;
+  border-radius: 20px;
+  filter: brightness(.85) contrast(1.05);
   background: var(--bg3);
+  border: 1px solid var(--border2);
+  box-shadow: var(--glass-shadow);
 }
+
+/* "10+ Years" badge: sized with clamp() so it never dominates the photo */
 .home-page .about-badge {
-  position: absolute; bottom: -16px; right: -16px;
+  position: absolute;
+  bottom: -16px; right: -16px;
   background: var(--accent); color: #000;
-  border-radius: 14px; padding: 20px 26px;
+  border-radius: 16px;
+  padding: clamp(12px, 1.6vw, 20px) clamp(16px, 2vw, 26px);
+  text-align: center;
 }
-.home-page .about-badge-num { font-family: 'Bebas Neue', sans-serif; font-size: 52px; line-height: 1; letter-spacing: 1px; }
-.home-page .about-badge-lbl { font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-top: 2px; }
+.home-page .about-badge-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1; letter-spacing: 1px;
+}
+.home-page .about-badge-lbl {
+  font-size: clamp(9.5px, 1vw, 11px);
+  font-weight: 800; letter-spacing: 1px; margin-top: 2px;
+}
+
 .home-page .check-list { list-style: none; margin: 28px 0 36px; display: flex; flex-direction: column; gap: 14px; }
 .home-page .check-list li { display: flex; gap: 12px; align-items: flex-start; }
 .home-page .check-icon {
@@ -350,13 +431,38 @@ img { display: block; max-width: 100%; }
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 900; color: var(--accent); flex-shrink: 0;
 }
-.home-page .check-list li span:last-child { font-size: 15px; color: var(--text2); line-height: 1.6; }
-@media (max-width: 900px) {
-  .home-page .about-grid { grid-template-columns: 1fr; }
-  .home-page .about-img { height: 320px; }
-  .home-page .about-badge { right: 10px; bottom: 10px; }
+.home-page .check-list li span:last-child {
+  font-size: clamp(14px, 1.4vw, 15px); color: var(--text2); line-height: 1.6;
 }
 
+/* Small laptops / tablets landscape */
+@media (max-width: 1100px) {
+  .home-page .about-img { max-height: 480px; object-position: center top; }
+}
+
+/* Tablet portrait + mobile: single column, photo on top */
+@media (max-width: 900px) {
+  .home-page .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .home-page .about-img-wrap {
+    width: 100%; max-width: 560px; margin: 0 auto;   /* centred, not stretched edge to edge */
+  }
+  .home-page .about-img { aspect-ratio: 4 / 3.4; max-height: none; object-position: center top; }
+  /* Badge moves inside the photo corner so it can't cause sideways scrolling */
+  .home-page .about-badge { right: 14px; bottom: 14px; }
+}
+
+/* Phones */
+@media (max-width: 540px) {
+  .home-page .about-grid { gap: 32px; }
+  .home-page .about-img { border-radius: 16px; aspect-ratio: 4 / 3.2; object-position: center top; }
+  .home-page .about-badge {
+    right: 10px; bottom: 10px;
+    border-radius: 12px; padding: 10px 14px;      /* much smaller than before */
+  }
+  .home-page .about-badge-num { font-size: 32px; }
+  .home-page .about-badge-lbl { font-size: 9px; }
+  .home-page .check-list { margin: 22px 0 28px; gap: 12px; }
+}
 /* ── SERVICES ── */
 .home-page .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 0; }
 .home-page .service-card {
@@ -443,18 +549,29 @@ img { display: block; max-width: 100%; }
 .home-page .cta-sub   { font-size: 15px; color: rgba(0,0,0,.6); margin-top: 10px; }
 .home-page .cta-actions { display: flex; gap: 14px; flex-wrap: wrap; }
 .home-page .btn-cta-dark {
-  background: #000; color: var(--text);
+  background: rgba(0, 0, 0, 0.88); color: #fff;
   padding: 13px 28px; border-radius: 10px;
-  font-size: 15px; font-weight: 700; border: none; cursor: pointer;
+  font-size: 15px; font-weight: 700;
+  border: 1px solid rgba(255,255,255,.12); cursor: pointer;
   transition: all .2s; display: inline-flex; align-items: center;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.12);
 }
-.home-page .btn-cta-dark:hover { background: #1a1b1f; transform: translateY(-2px); }
+.home-page .btn-cta-dark:hover { background: #000; color: #fff; transform: translateY(-2px); }
+/* "Book Now": light mode = white button + dark text */
+[data-theme="light"] .home-page .btn-cta-dark {
+  background: rgba(255,255,255,.92); color: #14161c;
+  border: 1px solid rgba(0,0,0,.10);
+  box-shadow: 0 6px 20px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.9);
+}
+[data-theme="light"] .home-page .btn-cta-dark:hover { background: #fff; color: #000; }
 .home-page .btn-cta-ghost {
   background: rgba(187, 6, 6, 0.12); color: #1c1a1a;
   border: 1.5px solid rgba(0,0,0,.25);
   padding: 13px 28px; border-radius: 10px;
   font-size: 15px; font-weight: 700; cursor: pointer;
   transition: all .2s; display: inline-flex; align-items: center;
+  
 }
 .home-page .btn-cta-ghost:hover { background: rgba(38, 35, 35, 0.22); transform: translateY(-2px); }
 
@@ -498,8 +615,8 @@ img { display: block; max-width: 100%; }
 /* ── FOOTER ── */
 .home-page .footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 72px 0 32px; }
 .home-page .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 48px; margin-bottom: 56px; }
-@media (max-width: 900px) { .home-page .footer-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 540px) { .home-page .footer-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .home-page .footer-grid { grid-template-columns: repeat(3, 1fr); gap: 32px 20px; } }
+@media (max-width: 540px) { .home-page .footer-grid { grid-template-columns: repeat(2, 1fr); } }
 .home-page .footer-brand { max-width: 340px; }
 .home-page .footer-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 .home-page .footer-logo-icon {
@@ -569,3 +686,172 @@ img { display: block; max-width: 100%; }
 .home-page .btn-outline:hover { background: var(--accent); color: #000; }
 
 .badge-arrived { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(59,130,246,.3); }
+
+/* ==========================================
+   GLASSMORPHISM — SHARED + LANDING PAGE
+   (dashboard components are styled in their own *.module.css files)
+   ========================================== */
+
+/* <option> lists can't be transparent, so give them a solid colour */
+select option { background: var(--solid); color: var(--text); }
+
+::selection { background: var(--accent-glow); }
+
+/* Badges get a light blur so they stay readable on any background */
+.badge { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+
+/* Timeline dot must be opaque so the connecting line doesn't show through */
+.tl-dot { background: var(--solid); }
+.tl-dot.done { background: var(--accent); }
+
+/* ── Landing header ── */
+.home-page .header {
+  background: var(--glass-header);
+  backdrop-filter: var(--blur-strong);
+  -webkit-backdrop-filter: var(--blur-strong);
+  border-bottom: 1px solid var(--border2);
+  box-shadow: var(--glass-highlight);
+}
+.home-page .header.scrolled { background: var(--glass-strong); }
+
+.home-page .mobile-nav {
+  background: var(--glass-strong);
+  backdrop-filter: var(--blur-strong);
+  -webkit-backdrop-filter: var(--blur-strong);
+}
+
+/* ── Landing glass cards ── */
+.home-page .service-card,
+.home-page .feature-card,
+.home-page .hero-pill,
+.home-page .contact-form-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+}
+.home-page .feature-card { border-top: 3px solid var(--accent); }
+.home-page .service-card:hover,
+.home-page .hero-pill:hover {
+  background: var(--bg3);
+  border-color: rgba(240,165,0,.45);
+}
+
+/* Section band is lighter so the blobs stay visible */
+.home-page .section-dark { background: rgba(255,255,255,0.025); }
+
+/* Footer */
+.home-page .footer {
+  background: var(--glass-strong);
+  backdrop-filter: var(--blur-strong);
+  -webkit-backdrop-filter: var(--blur-strong);
+  border-top: 1px solid var(--border2);
+}
+
+/* Landing inputs & small icon buttons */
+.home-page .form-control,
+.home-page .social-btn,
+.home-page .footer-social-link {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.home-page .form-control:focus {
+  background: var(--bg4);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* Primary button: glossy amber */
+.home-page .btn-primary {
+  background: linear-gradient(135deg, #ffc233, var(--accent));
+  box-shadow: 0 6px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.home-page .btn-primary:hover {
+  background: linear-gradient(135deg, #ffd060, var(--accent2));
+}
+.home-page .btn-outline {
+  background: var(--bg2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* About badge + back-to-top */
+.home-page .about-badge {
+  background: linear-gradient(135deg, rgba(255,194,51,.92), rgba(240,165,0,.88));
+  box-shadow: 0 12px 32px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,.5);
+}
+.home-page .back-top {
+  background: rgba(240,165,0,.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Gallery cards: glass border on the image tiles */
+.home-page .gallery-item {
+  border: 1px solid var(--border2);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================
+   MORE BLOBS — 10 blobs across 2 drifting layers (append to the end of globals.css)
+   ========================================== */
+
+/* Two extra colours for variety (dark) */
+:root {
+  --blob-4: rgba(20,184,166,0.20);   /* teal */
+  --blob-5: rgba(236,72,153,0.16);   /* pink */
+}
+/* Same colours, tuned for light mode */
+[data-theme="light"] {
+  --blob-4: rgba(20,184,166,0.18);
+  --blob-5: rgba(236,72,153,0.14);
+}
+
+/* Layer 1 (body::before): 6 large blobs, drifts one way.
+   Overrides the earlier 4-blob background; it comes later so it wins. */
+body::before {
+  background:
+    radial-gradient(34% 38% at 8%  10%, var(--blob-1), transparent 70%),
+    radial-gradient(38% 42% at 92% 12%, var(--blob-2), transparent 70%),
+    radial-gradient(36% 40% at 50% 38%, var(--blob-3), transparent 70%),
+    radial-gradient(40% 44% at 78% 92%, var(--blob-4), transparent 70%),
+    radial-gradient(34% 38% at 10% 88%, var(--blob-5), transparent 70%),
+    radial-gradient(28% 32% at 30% 62%, var(--blob-2), transparent 70%);
+}
+
+/* Layer 2 (html::before): 4 smaller blobs, drifts the opposite way.
+   The offset between layers makes the movement feel organic. */
+html::before {
+  content: '';
+  position: fixed; inset: -12%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(22% 26% at 20% 28%, var(--blob-4), transparent 70%),
+    radial-gradient(24% 28% at 70% 22%, var(--blob-5), transparent 70%),
+    radial-gradient(22% 26% at 62% 70%, var(--blob-1), transparent 70%),
+    radial-gradient(20% 24% at 88% 55%, var(--blob-3), transparent 70%);
+  animation: blob-drift-2 36s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes blob-drift-2 {
+  0%   { transform: translate3d(0, 0, 0) scale(1.04); }
+  50%  { transform: translate3d(-4%, 3%, 0) scale(1); }
+  100% { transform: translate3d(3%, -3%, 0) scale(1.08); }
+}
+
+/* Respect users who turn animations off */
+@media (prefers-reduced-motion: reduce) {
+  html::before { animation: none; }
+}

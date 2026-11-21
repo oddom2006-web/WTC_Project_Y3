@@ -1,4 +1,4 @@
-/* src/app/admin/admin.module.css */
+/* src/app/admin/admin.module.css — GLASSMORPHISM */
 
 .statsGrid {
   display: grid;
@@ -19,10 +19,11 @@
 .table { width:100%; border-collapse:collapse; font-size:13.5px; }
 .table thead th {
   text-align:left; padding:10px 14px;
-  background:var(--bg3); color:var(--text2);
+  background:var(--bg3); color:var(--text2);   /* frosted header row */
   font-size:11px; font-weight:700; letter-spacing:1px;
   text-transform:uppercase; font-family:var(--font-mono);
-  border-bottom:1px solid var(--border); white-space:nowrap;
+  border-bottom:1px solid var(--border2); white-space:nowrap;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
 }
 .table tbody tr { border-bottom:1px solid var(--border); transition:background .1s; }
 .table tbody tr:hover { background:var(--bg3); }
@@ -47,9 +48,9 @@
   background:var(--bg3); border:1px solid var(--border2);
   border-radius:var(--radius); padding:10px 14px;
   color:var(--text); font-family:var(--font); font-size:14px;
-  outline:none; transition:border-color .2s; width:100%;
+  outline:none; transition:border-color .2s, background .2s, box-shadow .2s; width:100%;
 }
-.input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
+.input:focus { background:var(--bg4); border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
 .input::placeholder { color:var(--text3); }
 
 .hint { font-size:13px; color:var(--text2); margin-bottom:16px; }
@@ -69,6 +70,7 @@
   padding:14px 20px; border-bottom:1px solid var(--border);
 }
 .branchRow:last-child { border-bottom:none; }
+.branchRow:hover { background:var(--bg3); }   /* glass hover */
 .branchLeft { display:flex; align-items:center; gap:12px; }
 .branchIcon { font-size:22px; }
 .branchName { font-weight:600; font-size:14px; }
@@ -78,24 +80,25 @@
   background:var(--bg3); border:1px solid var(--border2);
   border-radius:var(--radius); padding:7px 12px;
   color:var(--text); font-family:var(--font); font-size:13px;
-  outline:none; cursor:pointer; transition:border-color .2s;
+  outline:none; cursor:pointer; transition:border-color .2s, background .2s;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
 }
 .selectNative:focus { border-color:var(--accent); }
-.selectNative option { background:var(--bg3); }
+.selectNative option { background:var(--solid); color:var(--text); }   /* options can't be transparent */
 
 /* ── REPORTS ── */
 .barRow    { margin-bottom:14px; }
 .barHeader { display:flex; justify-content:space-between; margin-bottom:5px; align-items:center; }
-.barTrack  { height:5px; background:var(--bg3); border-radius:3px; }
-.barFill   { height:100%; background:var(--accent); border-radius:3px; transition:width .5s; }
+.barTrack  { height:6px; background:var(--bg3); border:1px solid var(--border); border-radius:4px; overflow:hidden; }
+.barFill   { height:100%; background:linear-gradient(90deg,var(--accent),#ffc233); box-shadow:0 0 10px var(--accent-glow); border-radius:4px; transition:width .5s; }
 
 /* ── PROFILE ── */
 .profileHeader { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
 .bigAvatar {
-  width:68px; height:68px; background:var(--accent); border-radius:16px;
+  width:68px; height:68px; background:linear-gradient(135deg,#ffc233,var(--accent)); border-radius:20px;
   display:flex; align-items:center; justify-content:center;
   font-size:30px; font-weight:700; color:#000; flex-shrink:0;
-  box-shadow:0 0 0 6px var(--accent-dim);
+  box-shadow:0 0 0 6px var(--accent-dim), inset 0 1px 0 rgba(255,255,255,.45);
 }
 .profileName  { font-size:22px; font-weight:700; }
 .profileEmail { font-size:14px; color:var(--text2); margin-top:4px; }

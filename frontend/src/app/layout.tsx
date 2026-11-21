@@ -40,10 +40,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 position="bottom-right"
                 toastOptions={{
                   style: {
-                    background: 'var(--bg2)',
-                    color:      'var(--text)',
-                    border:     '1px solid var(--border2)',
-                    fontFamily: 'var(--font)',
+                    // Glass toast: translucent background + its own blur
+                    background:           'var(--glass-strong)',
+                    color:                'var(--text)',
+                    border:               '1px solid var(--border2)',
+                    fontFamily:           'var(--font)',
+                    backdropFilter:       'blur(18px) saturate(140%)',
+                    WebkitBackdropFilter: 'blur(18px) saturate(140%)',
                   },
                   success: { iconTheme: { primary: '#22c55e', secondary: '#000' } },
                   error:   { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
