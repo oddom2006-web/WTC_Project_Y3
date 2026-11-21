@@ -398,7 +398,9 @@ export default function HomePage() {
             <div className="contact-grid">
               <div className="contact-info">
                 <div className="contact-item reveal">
-                  <div className="contact-item-icon">📍</div>
+                  <div className="contact-item-icon">
+                    <img src="assets/icons/googleMaps.svg" alt="Icon Google Map" width="18" height="18" />
+                  </div>
                   <div>
                     <div className="contact-item-label">{t('homepage.contact.address')}</div>
                     <div className="contact-item-val">
@@ -407,7 +409,9 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="contact-item reveal">
-                  <div className="contact-item-icon">📞</div>
+                  <div className="contact-item-icon">
+                    <img src="assets/images/mobile.png" alt="Icon Phone" width="18" height="18" />
+                  </div>
                   <div>
                     <div className="contact-item-label">{t('homepage.contact.phone')}</div>
                     <div className="contact-item-val">
@@ -418,7 +422,9 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="contact-item reveal">
-                  <div className="contact-item-icon">📩</div>
+                  <div className="contact-item-icon">
+                    <img src="assets/icons/gmail.svg" alt="Icon Gmail" width="18" height="18" />
+                  </div>
                   <div>
                     <div className="contact-item-label">{t('homepage.contact.email')}</div>
                     <div className="contact-item-val">
@@ -431,25 +437,16 @@ export default function HomePage() {
                   <div className="contact-item-label" style={{ marginBottom: 14 }}>{t('homepage.contact.followUs')}</div>
                   <div className="social-row">
                     <a href="https://www.facebook.com/share/1PS8aCXgcc/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="social-btn" title="Facebook">
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+                      <img src="assets/icons/facebook-icon.svg" alt="Icon Facebook" width="18" height="18" />
                     </a>
                     <a href="https://www.instagram.com/oddom2022" target="_blank" rel="noreferrer" className="social-btn" title="Instagram">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
-                        <rect x="2" y="2" width="20" height="20" rx="5" />
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                      </svg>
+                      <img src="assets/icons/instagram-icon.svg" alt="Icon Instagram" width="18" height="18"  />
                     </a>
                     <a href="https://youtube.com/@kh_empire_era" target="_blank" rel="noreferrer" className="social-btn" title="YouTube">
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                        <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-2C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 2A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-                        <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
-                      </svg>
+                      <img src="assets/icons/youtube.svg" alt="Icon Youtube" width="18" height="18" />
                     </a>
                     <a href="https://t.me/+xwsm9tXgukdhYzg1" target="_blank" rel="noreferrer" className="social-btn" title="Telegram">
-                      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
-                        <path d="M21.8 2.2a1 1 0 0 0-1-.2L2.4 9.4a1 1 0 0 0 .1 1.9l4.6 1.4 1.7 5.4a1 1 0 0 0 1.7.4l2.6-2.6 4.8 3.5a1 1 0 0 0 1.6-.6l3-15.5a1 1 0 0 0-.7-1.1zM9.6 14.8l-.9 3-1-3.2 8.4-7.7-6.5 7.9z" />
-                      </svg>
+                      <img src="assets/icons/telegram.svg" alt="Icon Telegram" width="18" height="18" />
                     </a>
                   </div>
                 </div>
@@ -512,21 +509,17 @@ export default function HomePage() {
                 {t('homepage.footer.desc')}
               </p>
               <div className="footer-social">
-                <a href="https://www.facebook.com/share/1PS8aCXgcc/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="footer-social-link" title="Facebook">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+                <a href="https://www.facebook.com/share/1PS8aCXgcc/?mibextid=wwXIfr" target="_blank" rel="noreferrer" className="social-btn" title="Facebook">
+                  <img src="assets/icons/facebook-icon.svg" alt="Icon Facebook" width="18" height="18" />
                 </a>
-                <a href="https://www.instagram.com/oddom2022" target="_blank" rel="noreferrer" className="footer-social-link" title="Instagram">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
-                    <rect x="2" y="2" width="20" height="20" rx="5" />
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                  </svg>
+                <a href="https://www.instagram.com/oddom2022" target="_blank" rel="noreferrer" className="social-btn" title="Instagram">
+                  <img src="assets/icons/instagram-icon.svg" alt="Icon Instagram" width="18" height="18"  />
                 </a>
-                <a href="https://youtube.com/@kh_empire_era" target="_blank" rel="noreferrer" className="footer-social-link" title="YouTube">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-2C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 2A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
-                    <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
-                  </svg>
+                <a href="https://youtube.com/@kh_empire_era" target="_blank" rel="noreferrer" className="social-btn" title="YouTube">
+                  <img src="assets/icons/youtube.svg" alt="Icon Youtube" width="18" height="18" />
+                </a>
+                <a href="https://t.me/+xwsm9tXgukdhYzg1" target="_blank" rel="noreferrer" className="social-btn" title="Telegram">
+                  <img src="assets/icons/telegram.svg" alt="Icon Telegram" width="18" height="18" />
                 </a>
               </div>
             </div>
@@ -563,7 +556,9 @@ export default function HomePage() {
         </div>
       </footer>
 
-      <a href="#home" className={`back-top ${backTop ? 'visible' : ''}`} aria-label="Back to top">↑</a>
+      <a href="#home" className={`back-top ${backTop ? 'visible' : ''}`} aria-label="Back to top">
+        <img src="assets/images/arrows.png" alt="Icon Back To Top" width="18" height="18" />
+      </a>
     </div>
   );
 }
