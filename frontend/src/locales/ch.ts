@@ -373,6 +373,7 @@ export const ch: Record<TranslationKey, string> = {
   "customer.detail.trackingId": "追踪编号",
   "customer.detail.sender": "寄件人",
   "customer.detail.created": "创建时间",
+  "customer.invoice.download": "下载发票",
 
   // Customer — profile
   "customer.profile.badge": "客户",

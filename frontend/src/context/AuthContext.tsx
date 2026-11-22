@@ -1,15 +1,8 @@
 'use client';
 // src/context/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth';
-import { auth }       from '@/lib/firebase';
-import { getUser, setUser } from '@/lib/firestore';
-import type { User }  from '@/types';
+import { api, ApiError, getToken, setToken, clearToken } from '@/lib/api';
+import type { User } from '@/types';
 
 interface AuthContextType {
   user:     User | null;
@@ -21,7 +14,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// ── Cookie helpers (so middleware can read role) ──────────────────────────────
+// ── Cookie helpers (so middleware can read role) — unchanged from the Firebase version ──
 function setCookie(name: string, value: string, days = 7) {
   const exp = new Date(Date.now() + days * 864e5).toUTCString();
   document.cookie = `${name}=${value};expires=${exp};path=/;SameSite=Strict`;
@@ -34,57 +27,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user,    setUserState] = useState<User | null>(null);
   const [loading, setLoading]   = useState(true);
 
+  // Restores the session on page load/refresh — the equivalent of Firebase's
+  // onAuthStateChanged, but driven by a token in localStorage instead of the
+  // SDK's own IndexedDB-backed persistence.
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        try {
-          const profile = await getUser(firebaseUser.uid);
-          if (profile) {
-            setUserState(profile);
-            setCookie('dom_role', profile.role); // for middleware
-          } else {
-            setUserState(null);
-            deleteCookie('dom_role');
-          }
-        } catch {
-          setUserState(null);
-          deleteCookie('dom_role');
-        }
-      } else {
+    async function restore() {
+      const token = getToken();
+      if (!token) { setLoading(false); return; }
+
+      try {
+        const { user: profile } = await api<{ user: User }>('/me');
+        setUserState(profile);
+        setCookie('dom_role', profile.role);
+      } catch {
+        clearToken();
         setUserState(null);
         deleteCookie('dom_role');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
-    return unsub;
+    }
+    restore();
   }, []);
 
   const login = async (email: string, password: string) => {
-    const cred    = await signInWithEmailAndPassword(auth, email, password);
-    const profile = await getUser(cred.user.uid);
-    if (!profile) throw new Error('User profile not found. Contact admin.');
-    setUserState(profile);
-    setCookie('dom_role', profile.role);
+    try {
+      const { token, user: profile } = await api<{ token: string; user: User }>('/login', {
+        method: 'POST',
+        body: { email, password },
+      });
+      setToken(token);
+      setUserState(profile);
+      setCookie('dom_role', profile.role);
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 422) throw new Error('Invalid credentials.');
+      throw e;
+    }
   };
 
   const register = async (name: string, email: string, phone: string, password: string) => {
-    const cred    = await createUserWithEmailAndPassword(auth, email, password);
-    const profile: User = {
-      uid:       cred.user.uid,
-      username:  name,
-      email,
-      phone,
-      address:   '',
-      role:      'customer',
-      createdAt: new Date().toISOString(),
-    };
-    await setUser(profile);
+    const { token, user: profile } = await api<{ token: string; user: User }>('/register', {
+      method: 'POST',
+      body: { username: name, email, phone, password },
+    });
+    setToken(token);
     setUserState(profile);
     setCookie('dom_role', 'customer');
   };
 
   const logout = async () => {
-    await signOut(auth);
+    try { await api('/logout', { method: 'POST' }); } catch { /* token may already be invalid — fine */ }
+    clearToken();
     setUserState(null);
     deleteCookie('dom_role');
   };

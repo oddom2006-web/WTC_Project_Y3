@@ -4,6 +4,8 @@ frontend/.next/
 frontend/out/
 frontend/.env
 frontend/.env.local
+frontend/.env.development.local
+frontend/lib/firebase.ts
 
 # Laravel Backend
 backend/vendor/

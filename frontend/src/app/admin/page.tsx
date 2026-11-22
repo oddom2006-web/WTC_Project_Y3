@@ -9,13 +9,11 @@ import { StatCard, Card, Btn, Modal, EmptyState, StatusBadge, SearchBar, TableWr
 import { useOrders, useBranches, useUsersByRole } from '@/hooks';
 import * as fs             from '@/lib/firestore';
 import { fmtDate, fmtDateTime } from '@/lib/utils';
-import { initializeApp, getApps, deleteApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import toast               from 'react-hot-toast';
 import type { Order, User, Branch } from '@/types';
 import { STATUS_LABELS }   from '@/types';
 import styles              from './admin.module.css';
-import { OrderDetailBody, PaymentBadge, PaymentStatusBadge, ServiceTypeBadge } from '../customer/page';
+import { OrderDetailBody, PaymentBadge, PaymentStatusBadge, ServiceTypeBadge } from '@/components/shared/OrderComponents';
 import { format }          from 'date-fns';
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
@@ -23,7 +21,9 @@ import {
   AreaChart, Area,
 } from 'recharts';
 
+
 type T = ReturnType<typeof useLanguage>['t'];
+type OrderStatus = keyof typeof STATUS_LABELS;
 
 // Vivid, theme-agnostic colors — kept consistent with the badge palette in globals.css
 const STATUS_COLORS: Record<string, string> = {
@@ -352,20 +352,15 @@ function AdminDrivers() {
     if (form.password.length < 6)  { toast.error('Password needs 6+ characters'); return; }
     setSaving(true);
     try {
-      // Use secondary app to avoid signing out admin
-      const secondaryApp  = initializeApp({ apiKey:'AIzaSyCQr8utoyrPkOqdSa_Gr-Xq_1Jrw1I1xVg', authDomain:'dom-express-a84da.firebaseapp.com', projectId:'dom-express-a84da', storageBucket:'dom-express-a84da.firebasestorage.app', messagingSenderId:'659512197286', appId:'1:659512197286:web:5b1ae352597349a8743467' }, 'driver_creation_' + Date.now());
-      const secondaryAuth = getAuth(secondaryApp);
-      const cred = await createUserWithEmailAndPassword(secondaryAuth, form.email, form.password);
-      const uid  = cred.user.uid;
-      await secondaryAuth.signOut();
-      await deleteApp(secondaryApp);
-
-      await fs.setUser({ uid, username:form.name, email:form.email, phone:form.phone, vehicle:form.vehicle, branch:form.branch, role:'driver', status:'active', address:'', createdAt:new Date().toISOString() });
+      // Admin API creates the auth account + profile in one request —
+      // no more juggling a second Firebase app to avoid signing the admin out.
+      await fs.createStaffAccount({
+        username: form.name, email: form.email, password: form.password,
+        role: 'driver', phone: form.phone, vehicle: form.vehicle, branch: form.branch, status: 'active',
+      });
       toast.success('Driver added!'); setModal(null); reload();
     } catch (err: any) {
-      let msg = err.message;
-      if (err.code === 'auth/email-already-in-use') msg = 'Email already registered.';
-      toast.error(msg);
+      toast.error(err.message);
     } finally { setSaving(false); }
   }
 
@@ -487,19 +482,13 @@ function AdminEmployees() {
     if (form.password.length < 6)  { toast.error('Password needs 6+ characters'); return; }
     setSaving(true);
     try {
-      const secondaryApp  = initializeApp({ apiKey:'AIzaSyCQr8utoyrPkOqdSa_Gr-Xq_1Jrw1I1xVg', authDomain:'dom-express-a84da.firebaseapp.com', projectId:'dom-express-a84da', storageBucket:'dom-express-a84da.firebasestorage.app', messagingSenderId:'659512197286', appId:'1:659512197286:web:5b1ae352597349a8743467' }, 'employee_creation_' + Date.now());
-      const secondaryAuth = getAuth(secondaryApp);
-      const cred = await createUserWithEmailAndPassword(secondaryAuth, form.email, form.password);
-      const uid  = cred.user.uid;
-      await secondaryAuth.signOut();
-      await deleteApp(secondaryApp);
-
-      await fs.setUser({ uid, username:form.name, email:form.email, phone:form.phone, branch:form.branch, role:'employee', status:'active', address:'', createdAt:new Date().toISOString() });
+      await fs.createStaffAccount({
+        username: form.name, email: form.email, password: form.password,
+        role: 'employee', phone: form.phone, branch: form.branch, status: 'active',
+      });
       toast.success('Employee added!'); setModal(null); reload();
     } catch (err: any) {
-      let msg = err.message;
-      if (err.code === 'auth/email-already-in-use') msg = 'Email already registered.';
-      toast.error(msg);
+      toast.error(err.message);
     } finally { setSaving(false); }
   }
 
@@ -1001,14 +990,26 @@ function AdminTracking() {
   const [statuses, setStatuses] = useState<Record<string, string>>({});
 
   async function update(o: Order) {
-    const newStatus = (statuses[o.orderId] ?? o.status) as any;
-    try {
-      await fs.updateOrderStatus(o.orderId, newStatus, 'Updated by admin');
-      if (o.customerId) await fs.addNotification(o.customerId, `Order ${STATUS_LABELS[newStatus]}`, `Your order ${o.orderId} is now ${STATUS_LABELS[newStatus]}`, 'info');
-      toast.success(`${o.orderId} → ${STATUS_LABELS[newStatus]}`);
-      reload();
-    } catch (err: any) { toast.error(err.message); }
+  const newStatus = (statuses[o.orderId] ?? o.status) as OrderStatus;
+
+  try {
+    await fs.updateOrderStatus(o.orderId, newStatus, 'Updated by admin');
+
+    if (o.customerId) {
+      await fs.addNotification(
+        o.customerId,
+        `Order ${STATUS_LABELS[newStatus]}`,
+        `Your order ${o.orderId} is now ${STATUS_LABELS[newStatus]}`,
+        'info'
+      );
+    }
+
+    toast.success(`${o.orderId} → ${STATUS_LABELS[newStatus]}`);
+    reload();
+  } catch (err: any) {
+    toast.error(err.message);
   }
+}
 
   return (
     <Card title={`🗺️ ${t('admin.card.updateTracking')}`} noPad>

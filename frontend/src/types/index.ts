@@ -67,6 +67,10 @@ export interface Order {
   createdAt:      string;
   updatedAt:      string;
   history:        HistoryEntry[];
+  senderLat?: number | null;
+  senderLng?: number | null;
+  receiverLat?: number | null;
+  receiverLng?: number | null;
 }
 
 export interface Branch {

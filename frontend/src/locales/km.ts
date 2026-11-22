@@ -21,7 +21,7 @@ export const km: Record<TranslationKey, string> = {
   'homepage.hero.title1':       "ទៅគ្រប់",
   'homepage.hero.title2':       "ទិសដៅ",
   'homepage.hero.desc':         "សេវាដឹកជញ្ជូនលឿន ទុកចិត្តបាន និងមានវិជ្ជាជីវៈទូទាំងកម្ពុជា។",
-  'homepage.hero.tagline':      "សេវាលឿន គិតដល់ ITEA3 EXPRESS។",
+  'homepage.hero.tagline':      "សេវាលឿន គិតដល់ DOM EXPRESS។",
   'homepage.hero.joinUs':       "ចូលរួមឥឡូវនេះ",
   'homepage.hero.bookDelivery': "កក់ការដឹកជញ្ជូន",
   'homepage.hero.branches':     "សាខា",
@@ -50,7 +50,7 @@ export const km: Record<TranslationKey, string> = {
   // homepage — services
   'homepage.services.label':   "សេវាកម្មរបស់យើង",
   'homepage.services.title':   "ទុកចិត្តលើសេវាកម្មរបស់យើង",
-  'homepage.services.text':    "នៅ ITEA3 EXPRESS ការទុកចិត្តមិនត្រឹមតែទទួលបានប៉ុណ្ណោះទេ — វាត្រូវបានផ្តល់ជូនជាមួយកញ្ចប់ទំនិញនីមួយៗ។ ល្បឿន សុវត្ថិភាព និងភាពស្មោះត្រង់ដល់មាត់ទ្វារអ្នក។",
+  'homepage.services.text':    "នៅ DOM EXPRESS ការទុកចិត្តមិនត្រឹមតែទទួលបានប៉ុណ្ណោះទេ — វាត្រូវបានផ្តល់ជូនជាមួយកញ្ចប់ទំនិញនីមួយៗ។ ល្បឿន សុវត្ថិភាព និងភាពស្មោះត្រង់ដល់មាត់ទ្វារអ្នក។",
   'homepage.services.s1Title': "ដឹកជញ្ជូនពេញឡាន (FTL)",
   'homepage.services.s1Desc':  "ឡានទាំងមូលកក់សម្រាប់អតិថិជនម្នាក់ — លឿនជាង សុវត្ថិភាពជាង ដឹកផ្ទាល់ពីទីតាំងទទួលដល់ទីតាំងបញ្ជូនដោយគ្មានឈប់។",
   'homepage.services.s2Title': "ដឹកជញ្ជូនផ្នែក (LTL)",
@@ -67,7 +67,7 @@ export const km: Record<TranslationKey, string> = {
   // homepage — features
   'homepage.features.label':    "ការប៉ាន់ស្មាន",
   'homepage.features.title':    "ដំណោះស្រាយចម្រុះជាច្រើន",
-  'homepage.features.text':     "ITEA3 EXPRESS ផ្តល់ជូនឧបករណ៍បត់បែនដើម្បីឆ្លើយតបនឹងតម្រូវការគម្រោងចម្រុះ — ចាប់ពីការព្យាករណ៍ពេលវេលា ការគ្រប់គ្រងធនធាន រហូតដល់ការគ្រប់គ្រងចំណាយ។",
+  'homepage.features.text':     "DOM EXPRESS ផ្តល់ជូនឧបករណ៍បត់បែនដើម្បីឆ្លើយតបនឹងតម្រូវការគម្រោងចម្រុះ — ចាប់ពីការព្យាករណ៍ពេលវេលា ការគ្រប់គ្រងធនធាន រហូតដល់ការគ្រប់គ្រងចំណាយ។",
   'homepage.features.getQuote': "សុំតម្លៃ →",
   'homepage.features.f1Num':    "ដំណោះស្រាយ",
   'homepage.features.f1Title':  "ដំណោះស្រាយ និងឯកទេស",
@@ -178,7 +178,7 @@ export const km: Record<TranslationKey, string> = {
   'auth.phonePlaceholder': 'លេខទូរសព្ទរបស់អ្នក',
   'auth.passwordPlaceholder': 'ពាក្យសម្ងាត់របស់អ្នក',
   'auth.registerBtn..': 'កំពុងបង្កើត…',
-  'auth.welcome':     'ស្វាគមន៍មកកាន់ ITEA3 Express។ក្រុមហ៊ុមដឹកជញ្ជូនឈានមុខគេនៅកម្ពុជា។',
+  'auth.welcome':     'ស្វាគមន៍មកកាន់ DOM Express។ក្រុមហ៊ុមដឹកជញ្ជូនឈានមុខគេនៅកម្ពុជា។',
   'auth.loginBtnLoading':     "កំពុងចូល…",
   'auth.registerBtnLoading':  "កំពុងបង្កើតគណនី…",
 
@@ -362,6 +362,7 @@ export const km: Record<TranslationKey, string> = {
   'customer.detail.trackingId': "លេខតាមដាន",
   'customer.detail.sender':     "អ្នកផ្ញើ",
   'customer.detail.created':    "បានបង្កើត",
+  'customer.invoice.download': "ទាញយកវិក្កយបត្រ PDF",
 
   // customer — profile
   'customer.profile.badge': "អតិថិជន",

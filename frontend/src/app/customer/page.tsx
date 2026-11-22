@@ -8,6 +8,8 @@ import DashboardLayout   from '@/components/layout/DashboardLayout';
 import { StatCard, Card, Btn, Modal, EmptyState, StatusBadge, SearchBar, TableWrap, Field } from '@/components/ui';
 import { useOrders, useBranches, useNotifications } from '@/hooks';
 import * as fs           from '@/lib/firestore';
+import { LiveTrackMap }  from '@/components/LiveTrackMap';
+import { PaymentBadge, PaymentStatusBadge, ServiceTypeBadge, OrderDetailBody } from '@/components/shared/OrderParts';
 import { fmtDate, fmtDateTime, calculatePrice } from '@/lib/utils';
 import toast             from 'react-hot-toast';
 import type { Order, PaymentMethod, ServiceType } from '@/types';
@@ -375,14 +377,9 @@ function TrackSection() {
     if (!raw) return;
     setLoading(true);
     try {
-      let found = await fs.getOrder(raw);
-      if (!found) {
-        // try by trackingId
-        const { getDocs, query: q2, where, collection } = await import('firebase/firestore');
-        const { db } = await import('@/lib/firebase');
-        const snap = await getDocs(q2(collection(db,'orders'), where('trackingId','==',raw)));
-        if (!snap.empty) found = snap.docs[0].data() as Order;
-      }
+      // getOrder() now matches by either orderId or trackingId server-side —
+      // no more separate direct-Firestore fallback query needed here.
+      const found = await fs.getOrder(raw);
       setOrder(found ?? 'notfound');
     } catch (err: any) {
       toast.error(err.message);
@@ -421,6 +418,15 @@ function TrackSection() {
               <div><div className={styles.profileLabel}>{t('customer.payment.title')}</div><div><PaymentBadge method={order.paymentMethod} /></div></div>
               <div><div className={styles.profileLabel}>{t('admin.th.payment')}</div><div><PaymentStatusBadge status={order.paymentStatus} /></div></div>
             </div>
+
+            {order.driverUid && ['assigned','pickedup','transit','outfordelivery'].includes(order.status) && (
+              <>
+                <div className={styles.divider} />
+                <div className={styles.sectionLabel}>📍 Live location</div>
+                <LiveTrackMap orderId={order.orderId} />
+              </>
+            )}
+
             <div className={styles.divider} />
             <div className={styles.sectionLabel}>{t('customer.track.historyLabel')}</div>
             <div>
@@ -516,102 +522,6 @@ function ProfileSection({ user }: { user: any }) {
           <div className={styles.colSpan2}><Field label={t('admin.th.address')}><input className={styles.input} value={form.address} onChange={e=>set('address',e.target.value)} /></Field></div>
         </div>
       </Modal>
-    </div>
-  );
-}
-
-/* ── ORDER DETAIL BODY (shared) ── */
-const PAYMENT_ICONS: Record<string, string> = { cod: '💵', qr: '📱', card: '💳' };
-
-export function PaymentBadge({ method }: { method?: string }) {
-  const { t } = useLanguage();
-  if (!method) return <span style={{ color:'var(--text3)' }}>—</span>;
-  const key = method === 'cod' ? 'customer.payment.cod' : method === 'qr' ? 'customer.payment.qr' : 'customer.payment.card';
-  return (
-    <span style={{ display:'inline-flex', alignItems:'center', gap:6, fontSize:12, fontWeight:600, color:'var(--text2)' }}>
-      <span>{PAYMENT_ICONS[method] ?? '💰'}</span>{t(key as any)}
-    </span>
-  );
-}
-
-export function PaymentStatusBadge({ status }: { status?: string }) {
-  const { t } = useLanguage();
-  const paid = status === 'paid';
-  return (
-    <span
-      className="badge"
-      style={{
-        background: paid ? 'var(--green-dim)' : 'var(--orange-dim)',
-        color:      paid ? 'var(--green)'     : 'var(--orange)',
-        border:     `1px solid ${paid ? 'var(--green)' : 'var(--orange)'}33`,
-      }}
-    >
-      {paid ? t('admin.payment.paid') : t('admin.payment.unpaid')}
-    </span>
-  );
-}
-
-export function ServiceTypeBadge({ type }: { type?: string }) {
-  const { t } = useLanguage();
-  if (!type) return <span style={{ color:'var(--text3)' }}>—</span>;
-  const direct = type === 'direct';
-  return (
-    <span
-      className="badge"
-      style={{
-        background: direct ? 'var(--blue-dim)' : 'var(--purple-dim)',
-        color:      direct ? 'var(--blue)'     : 'var(--purple)',
-        border:     `1px solid ${direct ? 'var(--blue)' : 'var(--purple)'}33`,
-      }}
-    >
-      {direct ? `🚀 ${t('customer.service.direct')}` : `🏢 ${t('customer.service.consolidated')}`}
-    </span>
-  );
-}
-
-export function OrderDetailBody({ order }: { order: Order }) {
-  const { t } = useLanguage();
-
-  const rows: [string, React.ReactNode][] = [
-    [t('customer.detail.trackingId'), <span key="tid" className={styles.mono} style={{color:'var(--accent)'}}>{order.trackingId}</span>],
-    [t('common.status'),              <StatusBadge key="st" status={order.status} />],
-    [t('customer.service.title'),     <ServiceTypeBadge key="svc" type={order.serviceType} />],
-    [t('customer.detail.sender'),     order.senderName],
-    [t('admin.th.receiver'),          order.receiverName],
-    [t('admin.th.phone'),             order.phone],
-    [t('customer.field.senderBranch'),   order.branch],
-    [t('customer.field.receiverBranch'), order.receiverBranch ?? '—'],
-    [t('admin.th.address'),           order.address],
-    [t('customer.track.package'),     `${order.packageType} · ${order.weight} kg${order.distanceKm != null ? ` · ${order.distanceKm} km` : ''}`],
-    [t('admin.th.driver'),            order.driverName ?? t('customer.track.notAssigned')],
-    [t('customer.price.total'),       <span key="price" style={{ color:'var(--accent)', fontWeight:700 }}>{order.price != null ? `$${order.price.toFixed(2)}` : '—'}</span>],
-    [t('customer.payment.title'),     <PaymentBadge key="pm" method={order.paymentMethod} />],
-    [t('admin.th.payment'),           <PaymentStatusBadge key="ps" status={order.paymentStatus} />],
-    [t('customer.detail.created'),    fmtDateTime(order.createdAt)],
-  ];
-
-  return (
-    <div>
-      <div className={styles.profileGrid} style={{ marginBottom:16 }}>
-        {rows.map(([l, v], i) => (
-          <div key={i}>
-            <div className={styles.profileLabel}>{l}</div>
-            <div>{v}</div>
-          </div>
-        ))}
-      </div>
-      <div className={styles.divider} />
-      <div className={styles.sectionLabel}>{t('customer.track.historyLabel')}</div>
-      {(order.history ?? []).map((h, i, arr) => (
-        <div key={i} className="tl-item">
-          {i < arr.length - 1 && <div className="tl-line" />}
-          <div className="tl-dot done">✓</div>
-          <div className="tl-content">
-            <div className="tl-status"><StatusBadge status={h.status} /></div>
-            <div className="tl-time">{fmtDateTime(h.time)} — {h.note}</div>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }
