@@ -20,7 +20,7 @@ export const en = {
   'homepage.hero.title1':       "TO EVERY",
   'homepage.hero.title2':       "DIRECTION",
   'homepage.hero.desc':         "Fast, reliable and professional delivery across Cambodia.",
-  'homepage.hero.tagline':      "Fast service, think of DOM EXPRESS.",
+  'homepage.hero.tagline':      "Fast service, think of ITEA3 EXPRESS.",
   'homepage.hero.joinUs':       "Join Us Now",
   'homepage.hero.bookDelivery': "Book a Delivery",
   'homepage.hero.branches':     "Branches",
@@ -49,7 +49,7 @@ export const en = {
   // Homepage — services
   'homepage.services.label':   "Our Services",
   'homepage.services.title':   "TRUSTED FOR OUR SERVICES",
-  'homepage.services.text':    "At DOM EXPRESS, trust isn't just earned — it's delivered with every parcel. Speed, safety, and sincerity right to your doorstep.",
+  'homepage.services.text':    "At ITEA3 EXPRESS, trust isn't just earned — it's delivered with every parcel. Speed, safety, and sincerity right to your doorstep.",
   'homepage.services.s1Title': "Truck Load (FTL)",
   'homepage.services.s1Desc':  "The whole truck booked for one customer — faster, safer, direct from pickup to drop without stops.",
   'homepage.services.s2Title': "Partial Load (LTL)",
@@ -66,7 +66,7 @@ export const en = {
   // Homepage — features
   'homepage.features.label':    "Estimation",
   'homepage.features.title':    "A WIDE RANGE OF SOLUTIONS",
-  'homepage.features.text':     "DOM EXPRESS offers flexible tools to fit diverse project requirements — from forecasting time and managing resources to controlling costs.",
+  'homepage.features.text':     "ITEA3 EXPRESS offers flexible tools to fit diverse project requirements — from forecasting time and managing resources to controlling costs.",
   'homepage.features.getQuote': "Get a Quote →",
   'homepage.features.f1Num':    "SOLUTION",
   'homepage.features.f1Title':  "Solutions & Specialized",
@@ -178,7 +178,7 @@ export const en = {
   'auth.phonePlaceholder': '+855 xx xxx xxxx',
   'auth.passwordPlaceholder': 'Min 6 characters',
   'auth.registerBtn..': 'Creating…',
-  'auth.welcome':     'Welcome to DOM Express.Cambodia\'s trusted logistics platform',
+  'auth.welcome':     'Welcome to ITEA3 Express.Cambodia\'s trusted logistics platform',
   'auth.loginBtnLoading':     "Signing in…",
   'auth.registerBtnLoading':  "Creating account…",
 
@@ -362,7 +362,6 @@ export const en = {
   'customer.detail.trackingId': "Tracking ID",
   'customer.detail.sender':     "Sender",
   'customer.detail.created':    "Created",
-  'customer.invoice.download': "Download Invoice",
 
   // Customer — profile
   'customer.profile.badge': "CUSTOMER",

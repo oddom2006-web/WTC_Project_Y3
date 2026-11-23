@@ -37,8 +37,12 @@ export default function AuthPage() {
       toast.success('Welcome back!');
       // redirect handled by useAuth onAuthStateChanged + root page
     } catch (err: any) {
-      // The API already returns a friendly message ("Invalid credentials.")
-      toast.error(err.message ?? 'Login failed');
+      let msg = err.message ?? 'Login failed';
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential')
+        msg = 'Invalid email or password.';
+      if (err.code === 'auth/too-many-requests')
+        msg = 'Too many attempts. Try again later.';
+      toast.error(msg);
     } finally { setLoading(false); }
   }
 
@@ -57,9 +61,10 @@ export default function AuthPage() {
       await register(name, email, phone, pw);
       toast.success('Account created!');
     } catch (err: any) {
-      // Laravel validation already returns friendly text, e.g. "The email has
-      // already been taken."
-      toast.error(err.message ?? 'Registration failed');
+      let msg = err.message ?? 'Registration failed';
+      if (err.code === 'auth/email-already-in-use') msg = 'Email already registered.';
+      if (err.code === 'auth/invalid-email')        msg = 'Invalid email address.';
+      toast.error(msg);
     } finally { setLoading(false); }
   }
 
@@ -81,14 +86,14 @@ export default function AuthPage() {
           <div className={styles.logoIcon}>
             <Image
               src="/assets/images/logo.png"
-              alt="DomExpress Logo"
+              alt="ITEA3 EXPRESS Logo"
               width={35}
               height={30}
             />
           </div>
 
           <div>
-            <div className={styles.logoName}>DOM EXPRESS</div>
+            <div className={styles.logoName}>ITEA3 EXPRESS</div>
             <div className={styles.logoSub}>{t('auth.platform')}</div>
           </div>
         </div>

@@ -3,14 +3,14 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ITEA3express
-      MYSQL_USER: ITEA3express
-      MYSQL_PASSWORD: ITEA3_express
-      MYSQL_ROOT_PASSWORD: Rupp.oudom.2006
+      MYSQL_DATABASE: domexpress
+      MYSQL_USER: domexpress
+      MYSQL_PASSWORD: change_me
+      MYSQL_ROOT_PASSWORD: change_me_root
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pRupp.oudom.2006"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pchange_me_root"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -37,7 +37,7 @@ services:
         # Must be the URL the *browser* can reach — for local dev that's the
         # host machine's mapped api port, not an internal container hostname.
         NEXT_PUBLIC_API_URL: http://localhost:8000/api
-        NEXT_PUBLIC_REVERB_APP_KEY: 57db02062228a6f7503a78b7516182c3
+        NEXT_PUBLIC_REVERB_APP_KEY: domexpress-key
         NEXT_PUBLIC_REVERB_HOST: localhost
         NEXT_PUBLIC_REVERB_PORT: 8080
         NEXT_PUBLIC_REVERB_SCHEME: http

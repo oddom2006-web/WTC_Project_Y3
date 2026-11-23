@@ -128,7 +128,7 @@ export const km: Record<TranslationKey, string> = {
   'homepage.footer.privacyPolicy':  "គោលការណ៍ភាពឯកជន",
   'homepage.footer.terms':          "លក្ខខណ្ឌប្រើប្រាស់",
   'homepage.footer.ourBranches':    "សាខារបស់យើង",
-  'homepage.footer.copyright':      "© ២០២៦ ITEA3 EXPRESS។ រក្សាសិទ្ធិគ្រប់យ៉ាងដោយ",
+  'homepage.footer.copyright':      "© ២០២៦ DOM EXPRESS។ រក្សាសិទ្ធិគ្រប់យ៉ាងដោយ",
 
   // ── Nav ──
   'nav.dashboard':     'ផ្ទាំងគ្រប់គ្រង',
@@ -362,7 +362,6 @@ export const km: Record<TranslationKey, string> = {
   'customer.detail.trackingId': "លេខតាមដាន",
   'customer.detail.sender':     "អ្នកផ្ញើ",
   'customer.detail.created':    "បានបង្កើត",
-  'customer.invoice.download': "ទាញយកវិក្កយបត្រ PDF",
 
   // customer — profile
   'customer.profile.badge': "អតិថិជន",

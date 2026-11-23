@@ -29,7 +29,7 @@ export function LanguageToggle() {
       title="Switch language"
       aria-label="Toggle language"
     >
-      {lang === "en" ? "ខ្មែរ" : lang === "km" ? "中文" : "EN"}
+      {lang === 'en' ? 'ខ្មែរ' : 'EN'}
     </button>
   );
 }
