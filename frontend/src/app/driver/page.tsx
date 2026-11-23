@@ -8,8 +8,6 @@ import DashboardLayout      from '@/components/layout/DashboardLayout';
 import { StatCard, Card, Btn, Modal, EmptyState, StatusBadge, TableWrap } from '@/components/ui';
 import { useBranches }      from '@/hooks';
 import * as fs               from '@/lib/firestore';
-import { db }               from '@/lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
 import { fmtDate, fmtDateTime } from '@/lib/utils';
 import toast                from 'react-hot-toast';
 import type { Order, OrderStatus } from '@/types';
@@ -37,6 +35,29 @@ export default function DriverDashboard() {
   useEffect(() => {
     if (user && user.role !== 'driver') router.replace('/auth');
   }, [user, router]);
+
+  // Broadcasts this driver's GPS every ~5s while the app is open, for any
+  // customer currently watching the live tracking map on an active order.
+  useEffect(() => {
+    if (!user || typeof navigator === 'undefined' || !navigator.geolocation) return;
+
+    let lastSent = 0;
+    const watchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const now = Date.now();
+        if (now - lastSent < 5000) return; // throttle to ~1 ping / 5s
+        lastSent = now;
+        fs.updateDriverLocation(
+          pos.coords.latitude, pos.coords.longitude,
+          pos.coords.heading ?? undefined, pos.coords.speed ?? undefined
+        ).catch(() => { /* silent — a missed ping isn't worth interrupting the driver */ });
+      },
+      () => { /* location denied/unavailable — tracking map just won't show a marker yet */ },
+      { enableHighAccuracy: true, maximumAge: 5000 }
+    );
+
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, [user]);
 
   if (!user) return null;
 
@@ -69,11 +90,9 @@ export default function DriverDashboard() {
   );
 }
 
-/* ── HELPERS: fetch driver orders from Firestore ── */
+/* ── HELPERS: fetch this driver's orders from the API ── */
 async function fetchDriverOrders(driverUid: string): Promise<Order[]> {
-  const q    = query(collection(db, 'orders'), where('assignedDriver', '==', driverUid));
-  const snap = await getDocs(q);
-  const list = snap.docs.map(d => d.data() as Order);
+  const list = await fs.getOrdersByDriver(driverUid);
   list.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   return list;
 }
@@ -213,6 +232,7 @@ function UpdateModal({
   const options: OrderStatus[] = ['assigned','pickedup','transit','outfordelivery','delivered','failed'];
 
   async function save() {
+    if (!order) return;
     setSaving(true);
     try {
       const finalNote = note.trim() || STATUS_LABELS[status];
@@ -303,13 +323,7 @@ function DriverHistory({ driverUid }: { driverUid: string }) {
     async function load() {
       setLoading(true);
       try {
-        const q    = query(
-          collection(db, 'orders'),
-          where('assignedDriver', '==', driverUid),
-          where('status', '==', 'delivered')
-        );
-        const snap = await getDocs(q);
-        const list = snap.docs.map(d => d.data() as Order);
+        const list = (await fs.getOrdersByDriver(driverUid)).filter(o => o.status === 'delivered');
         list.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
         setOrders(list);
       } catch (e: any) { toast.error(e.message); }

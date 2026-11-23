@@ -13,7 +13,7 @@ COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
 COPY . .
-RUN composer dump-autoload --optimize \
+RUN BROADCAST_CONNECTION=null composer dump-autoload --optimize \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # nginx serves public/ directly and proxies *.php to php-fpm on 127.0.0.1:9000 —

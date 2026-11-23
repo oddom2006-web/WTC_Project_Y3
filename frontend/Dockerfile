@@ -11,7 +11,7 @@ COPY . .
 # NEXT_PUBLIC_* vars are inlined into the JS bundle at build time, so this
 # has to be a build ARG, not just a runtime environment variable.
 ARG NEXT_PUBLIC_API_URL=http://localhost:8000/api
-ARG NEXT_PUBLIC_REVERB_APP_KEY=domexpress-key
+ARG NEXT_PUBLIC_REVERB_APP_KEY=57db02062228a6f7503a78b7516182c3
 ARG NEXT_PUBLIC_REVERB_HOST=localhost
 ARG NEXT_PUBLIC_REVERB_PORT=8080
 ARG NEXT_PUBLIC_REVERB_SCHEME=http

@@ -12,7 +12,7 @@ import { fmtDate, fmtDateTime, calculatePrice } from '@/lib/utils';
 import toast              from 'react-hot-toast';
 import type { Order, PaymentMethod, ServiceType, User } from '@/types';
 import { STATUS_LABELS }  from '@/types';
-import { PaymentBadge, PaymentStatusBadge, ServiceTypeBadge, OrderDetailBody } from '../customer/page';
+import { PaymentBadge, PaymentStatusBadge, ServiceTypeBadge, OrderDetailBody } from '@/components/shared/OrderParts';
 import styles              from '../driver/driver.module.css'; // shares the same class vocabulary as driver/admin/customer
 
 type T = ReturnType<typeof useLanguage>['t'];

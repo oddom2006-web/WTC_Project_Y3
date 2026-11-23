@@ -1,4 +1,4 @@
-/* src/app/driver/driver.module.css — GLASSMORPHISM */
+/* src/app/driver/driver.module.css */
 
 .statsGrid {
   display: grid;
@@ -11,11 +11,10 @@
 .table { width:100%; border-collapse:collapse; font-size:13.5px; }
 .table thead th {
   text-align:left; padding:10px 14px;
-  background:var(--bg3); color:var(--text2);   /* frosted header row */
+  background:var(--bg3); color:var(--text2);
   font-size:11px; font-weight:700; letter-spacing:1px;
   text-transform:uppercase; font-family:var(--font-mono);
-  border-bottom:1px solid var(--border2); white-space:nowrap;
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border); white-space:nowrap;
 }
 .table tbody tr { border-bottom:1px solid var(--border); transition:background .1s; }
 .table tbody tr:hover { background:var(--bg3); }
@@ -27,11 +26,9 @@
 .muted   { font-size:12px; color:var(--text2); }
 
 /* ── UPDATE MODAL ── */
-/* Small glass panel inside the glass modal */
 .updateInfo {
-  background: var(--bg3); border:1px solid var(--border2); border-radius: 14px;
+  background: var(--bg3); border-radius: var(--radius);
   padding: 14px; margin-bottom: 14px;
-  box-shadow: var(--glass-highlight);
 }
 .infoLabel { font-size:11px; color:var(--text3); letter-spacing:.8px; text-transform:uppercase; font-family:var(--font-mono); margin-bottom:6px; }
 .infoName  { font-size:15px; font-weight:600; }
@@ -44,19 +41,19 @@
   background:var(--bg3); border:1px solid var(--border2);
   border-radius:var(--radius); padding:10px 14px;
   color:var(--text); font-family:var(--font); font-size:14px;
-  outline:none; transition:border-color .2s, background .2s, box-shadow .2s; width:100%;
+  outline:none; transition:border-color .2s; width:100%;
 }
-.input:focus { background:var(--bg4); border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
+.input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
 .input::placeholder { color:var(--text3); }
 
 /* ── PROFILE ── */
 .formCard { max-width:660px; margin:0 auto; }
 .profileHeader { display:flex; align-items:center; gap:16px; margin-bottom:24px; }
 .bigAvatar {
-  width:68px; height:68px; background:linear-gradient(135deg,#ffc233,var(--accent)); border-radius:20px;
+  width:68px; height:68px; background:var(--accent); border-radius:16px;
   display:flex; align-items:center; justify-content:center;
   font-size:30px; font-weight:700; color:#000; flex-shrink:0;
-  box-shadow:0 0 0 6px var(--accent-dim), inset 0 1px 0 rgba(255,255,255,.45);
+  box-shadow:0 0 0 6px var(--accent-dim);
 }
 .profileName  { font-size:22px; font-weight:700; }
 .profileEmail { font-size:14px; color:var(--text2); margin-top:4px; }
@@ -66,13 +63,7 @@
 
 /* ── MINI STATS ── */
 .miniStats { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-.miniStat  {
-  background:var(--bg3); border:1px solid var(--border2); border-radius:14px;
-  padding:16px; text-align:center;
-  box-shadow:var(--glass-highlight);
-  transition:border-color .2s, transform .2s;
-}
-.miniStat:hover { border-color:var(--accent); transform:translateY(-2px); }
+.miniStat  { background:var(--bg3); border-radius:var(--radius); padding:16px; text-align:center; }
 .miniStatVal   { font-size:28px; font-weight:700; font-family:var(--font-mono); line-height:1; }
 .miniStatLabel { font-size:12px; color:var(--text2); margin-top:6px; }
 
