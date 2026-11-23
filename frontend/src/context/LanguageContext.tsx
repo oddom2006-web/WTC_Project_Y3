@@ -3,10 +3,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { en } from '@/locales/en';
 import { km } from '@/locales/km';
+import { ch } from "@/locales/ch";
 
-export type Lang = 'en' | 'km';
+export type Lang = 'en' | 'km' | 'ch';
 
-const dictionaries: Record<Lang, Record<string, string>> = { en, km };
+const dictionaries: Record<Lang, Record<string, string>> = { en, km, ch };
 
 interface LanguageContextType {
   lang: Lang;
@@ -24,7 +25,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   // before paint, so we just sync React state to whatever it landed on.
   useEffect(() => {
     const current = (document.documentElement.getAttribute('lang') as Lang) || 'en';
-    setLangState(current === 'km' ? 'km' : 'en');
+    setLangState(current === 'km' ? 'km' : current === 'ch' ? 'ch' : 'en');
   }, []);
 
   const setLang = (l: Lang) => {
@@ -33,7 +34,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('dom_lang', l);
   };
 
-  const toggleLang = () => setLang(lang === 'en' ? 'km' : 'en');
+  const toggleLang = () => setLang(lang === 'en' ? 'km' : lang === 'km' ? 'ch' : 'en');
 
   const t = (key: keyof typeof en): string => {
     return dictionaries[lang][key] ?? dictionaries.en[key] ?? key;
