@@ -1,0 +1,101 @@
+/* src/components/home/FooterRoad.module.css — 100% wide footer bar with a 3D-style road */
+
+/* ── Theme colours (dark = default, light when <html data-theme="light">) ── */
+.wrap {
+  --road-top: #1b2033;   --road-bottom: #141829;
+  --walk-top: #46507a;   --walk-face: #2b3354;
+  --dash: rgba(255,255,255,.6);
+  --sky-far: rgba(255,255,255,.04);
+  --sky-near: rgba(255,255,255,.075);
+  --road-h: 72px;
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-top: 1px solid var(--border2);
+}
+:global([data-theme='light']) .wrap {
+  --road-top: #b4bac9;   --road-bottom: #9da4b6;
+  --walk-top: #eef1f8;   --walk-face: #c4cbdd;
+  --dash: rgba(255,255,255,.95);
+  --sky-far: rgba(60,80,140,.07);
+  --sky-near: rgba(60,80,140,.13);
+}
+
+/* ── Footer text (sits above the road, over the skyline) ── */
+.content {
+  position: relative; z-index: 2;
+  max-width: 1200px; margin: 0 auto;
+  padding: 26px 24px calc(var(--road-h) + 14px);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px 20px;
+  text-shadow: 0 1px 10px var(--bg);
+}
+.content :global(.footer-copy) { color: var(--text2); }
+
+/* ── Skyline: a mask shape tinted by a theme colour, scrolling slowly ── */
+.sky {
+  position: absolute; left: 0; right: 0; bottom: calc(var(--road-h) - 8px);
+  pointer-events: none;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='100' viewBox='0 0 640 100'%3E%3Cpolygon points='0,62 34,62 34,40 62,40 62,62 84,62 84,54 114,54 114,30 150,30 150,62 174,62 174,48 206,48 206,70 232,70 232,36 262,36 262,62 290,62 290,52 324,52 324,26 354,26 354,64 378,64 378,58 408,58 408,74 434,74 434,44 462,44 462,66 500,66 500,38 540,38 540,56 580,56 580,48 610,48 610,62 640,62 640,100 0,100'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='100' viewBox='0 0 640 100'%3E%3Cpolygon points='0,62 34,62 34,40 62,40 62,62 84,62 84,54 114,54 114,30 150,30 150,62 174,62 174,48 206,48 206,70 232,70 232,36 262,36 262,62 290,62 290,52 324,52 324,26 354,26 354,64 378,64 378,58 408,58 408,74 434,74 434,44 462,44 462,66 500,66 500,38 540,38 540,56 580,56 580,48 610,48 610,62 640,62 640,100 0,100'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: repeat-x;  mask-repeat: repeat-x;
+}
+.skyFar  { height: 50px; background: var(--sky-far);  -webkit-mask-size: 320px 50px; mask-size: 320px 50px; animation: skyFar 90s linear infinite; }
+.skyNear { height: 75px; background: var(--sky-near); -webkit-mask-size: 480px 75px; mask-size: 480px 75px; animation: skyNear 50s linear infinite; }
+@keyframes skyFar  { from { -webkit-mask-position: 0 100%;     mask-position: 0 100%; }     to { -webkit-mask-position: -320px 100%; mask-position: -320px 100%; } }
+@keyframes skyNear { from { -webkit-mask-position: 0 100%;     mask-position: 0 100%; }     to { -webkit-mask-position: -480px 100%; mask-position: -480px 100%; } }
+
+/* ── Road ── */
+.road {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: var(--road-h);
+  background: linear-gradient(180deg, var(--road-top), var(--road-bottom));
+  z-index: 1;
+}
+/* raised sidewalk with a lit top face and a darker front face (the 3D curb) */
+.walk {
+  position: absolute; left: 0; right: 0; top: -8px; height: 8px;
+  background: linear-gradient(180deg, var(--walk-top) 0 50%, var(--walk-face) 50% 100%);
+  box-shadow: 0 -6px 14px rgba(0,0,0,.18);
+}
+/* centre dashes slide to the left to give a feeling of speed */
+.dashes {
+  position: absolute; left: 0; right: 0; bottom: 33px; height: 3px;
+  background: repeating-linear-gradient(90deg, var(--dash) 0 26px, transparent 26px 56px);
+  animation: dashes .9s linear infinite;
+}
+@keyframes dashes { from { background-position: 0 0; } to { background-position: -56px 0; } }
+
+/* ── Vehicles ── */
+.veh { position: absolute; left: 0; will-change: transform; animation-timing-function: linear; animation-iteration-count: infinite; }
+.far  { bottom: 38px; }          /* far lane: higher up the road, smaller */
+.near { bottom: 3px; }           /* near lane: closer to the viewer, bigger */
+.toRight { animation-name: rideRight; }
+.toLeft  { animation-name: rideLeft; }
+@keyframes rideRight { from { transform: translateX(-200px); } to { transform: translateX(100vw); } }
+@keyframes rideLeft  { from { transform: translateX(100vw); }  to { transform: translateX(-200px); } }
+
+.svg  { display: block; width: 100%; height: auto; overflow: visible; }
+.flip { transform: scaleX(-1); }
+
+/* small engine bounce */
+.bounce { animation: bounce .42s ease-in-out infinite alternate; }
+@keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-1.2px); } }
+
+/* wheels spin */
+.spin { transform-box: fill-box; transform-origin: center; animation: spin .45s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Respect users who turn animations off: park the vehicles on the road */
+@media (prefers-reduced-motion: reduce) {
+  .sky, .dashes, .bounce, .spin { animation: none; }
+  .veh { animation: none; transform: none; left: var(--rest); }
+}
+
+/* ── Small screens: stack the text, slightly smaller vehicles ── */
+@media (max-width: 700px) {
+  .wrap { --road-h: 64px; }
+  .content { justify-content: center; text-align: center; padding: 22px 16px calc(var(--road-h) + 12px); }
+  .veh { zoom: .85; }
+}

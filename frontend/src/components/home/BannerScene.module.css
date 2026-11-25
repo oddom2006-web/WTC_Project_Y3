@@ -1,0 +1,119 @@
+/* src/components/home/FooterScene.module.css — animated isometric scene (replaces the About banner) */
+
+/* ── Theme colours (dark = default, light when <html data-theme="light">) ── */
+.wrap {
+  --ground-top: #1f2744;  --ground-l: #161c33;  --ground-r: #11162b;
+  --road: #2b2f40;        --road-line: rgba(255,255,255,.65);
+  --wall-l: #c9d1e6;      --wall-r: #a9b3cd;
+  --glow: #3b82f6;
+  --cloud: rgba(255,255,255,.14);
+  --sky-top: rgba(59,130,246,.22);
+
+  /* Fills the About column exactly like the old <img>: no extra padding */
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+:global([data-theme='light']) .wrap {
+  --ground-top: #e4eaf6;  --ground-l: #c9d2e6;  --ground-r: #b9c3da;
+  --road: #4b4d56;        --road-line: rgba(255,255,255,.9);
+  --wall-l: #f4f6fb;      --wall-r: #d6dcec;
+  --glow: #f0a500;
+  --cloud: rgba(255,255,255,.85);
+  --sky-top: rgba(120,170,255,.30);
+}
+
+/* ── Glass card: same size, radius and border as the old .about-img ── */
+.card {
+  width: 100%;
+  max-width: none;
+  aspect-ratio: 4 / 4.2;          /* desktop: tall like the old photo */
+  max-height: 560px;
+  display: flex;
+  align-items: flex-end;          /* scene sits at the bottom, sky fills the top */
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  /* soft sky gradient above the glass surface */
+  background: linear-gradient(180deg, var(--sky-top) 0%, transparent 55%), var(--bg2);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+}
+.scene { display: block; width: 100%; height: auto; }
+
+.edge polygon { stroke: rgba(0,0,0,.14); stroke-width: .6; stroke-linejoin: round; }
+.cloud { fill: var(--cloud); }
+
+/* ── Animations ──
+   --dx / --dy are set per element from the TSX (isometric pixel offsets). */
+
+/* Truck drives the whole road, fading in and out at the ends */
+.drive { animation: drive 15s linear infinite; }
+@keyframes drive {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+}
+
+/* Tiny suspension bounce for trucks and workers */
+.bob { animation: bob .55s ease-in-out infinite alternate; }
+@keyframes bob { from { transform: translateY(0); } to { transform: translateY(-1.2px); } }
+
+/* Worker walks out with a crate and comes back empty-handed */
+.carry { animation: carry 7s ease-in-out infinite; }
+@keyframes carry {
+  0%, 8%  { transform: translate(0, 0); }
+  46%, 54% { transform: translate(var(--dx), var(--dy)); }
+  92%, 100% { transform: translate(0, 0); }
+}
+
+/* Forklift shuttles back and forth */
+.shuttle { animation: shuttle 8s ease-in-out infinite alternate; }
+@keyframes shuttle { from { transform: translate(0, 0); } to { transform: translate(var(--dx), var(--dy)); } }
+
+/* Fork and load lift up and down */
+.lift { animation: lift 4s ease-in-out infinite alternate; }
+@keyframes lift { from { transform: translateY(0); } to { transform: translateY(-13px); } }
+
+/* Warehouse shutter slides up and down */
+.shutter { transform-box: fill-box; transform-origin: 50% 0; animation: shutter 10s ease-in-out infinite; }
+@keyframes shutter {
+  0%, 30%  { transform: scaleY(1); }
+  45%, 75% { transform: scaleY(.12); }
+  90%, 100% { transform: scaleY(1); }
+}
+
+/* Trees sway gently */
+.sway { transform-box: fill-box; transform-origin: 50% 100%; animation: sway 4s ease-in-out infinite alternate; }
+@keyframes sway { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+
+/* Clouds drift */
+.cloudA { animation: drift 26s ease-in-out infinite alternate; }
+.cloudB { animation: drift 32s ease-in-out infinite alternate-reverse; }
+@keyframes drift { from { transform: translateX(-14px); } to { transform: translateX(30px); } }
+
+/* Respect users who turn animations off */
+@media (prefers-reduced-motion: reduce) {
+  .drive, .bob, .carry, .shuttle, .lift, .shutter, .sway, .cloudA, .cloudB { animation: none; }
+  .drive { opacity: 0; }
+}
+
+/* ── Responsive: same breakpoints as the old .about-img ── */
+
+/* Small laptops */
+@media (max-width: 1100px) {
+  .card { max-height: 480px; }
+}
+
+/* Tablet + mobile: one column, wider/shorter box (matches 4 / 3.4) */
+@media (max-width: 900px) {
+  .card { aspect-ratio: 4 / 3.4; max-height: none; }
+}
+
+/* Phones */
+@media (max-width: 540px) {
+  .card { aspect-ratio: 4 / 3.2; border-radius: 16px; }
+}

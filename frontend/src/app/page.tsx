@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ThemeToggle, LanguageToggle } from '@/components/ui/Toggles';
 import { useLanguage } from '@/context/LanguageContext';
+import FooterScene from '@/components/home/BannerScene';
+import FooterRoad from '@/components/home/FooterRoad';
 
 const BOOK_FORM = 'https://forms.gle/V8r7aFGMhThujFmJ8';
 
@@ -192,7 +194,7 @@ export default function HomePage() {
         <section className="hero" id="home">
           <div
             className="hero-bg-img"
-            style={{ backgroundImage: "url('/assets/images/homepage.png')" }}
+            style={{ backgroundImage: "url('/assets/images/bg.png')" }}
           />
           <div className="hero-overlay" />
 
@@ -258,12 +260,10 @@ export default function HomePage() {
         <section className="section" id="about">
           <div className="container about-grid">
             <div className="about-img-wrap reveal">
-              <img
-                src="/assets/images/about-banner.jpe"
-                alt="ITEA3 EXPRESS operations"
-                className="about-img"
-                onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
+
+               {/* Animated isometric scene replaces the old about-banner image */}
+              <FooterScene/>
+              
               <div className="about-badge">
                 <div className="about-badge-num">10+</div>
                 <div className="about-badge-lbl">{t('homepage.about.yearsExp')}</div>
@@ -373,6 +373,7 @@ export default function HomePage() {
               ))}
             </div>
           </div>
+          
         </section>
 
         {/* CTA BAND */}
@@ -493,7 +494,7 @@ export default function HomePage() {
             <div className="footer-brand">
               <div className="footer-logo">
                 <div className="footer-logo-icon">
-                                  <Image
+                  <Image
                     src="/assets/images/logo.png"
                     alt="ITEA3 EXPRESS Logo"
                     width={35}
@@ -548,12 +549,11 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-
-          <div className="footer-bottom">
-            <p className="footer-copy">{t('homepage.footer.copyright')} <a href="#">@ITEA3 EXPRESS</a></p>
-            <p className="footer-copy">+855 87 327 406 · +855 15 318 880 . +855 95 542 956 · ITEA3@gmail.com</p>
-          </div>
         </div>
+        <FooterRoad>
+          <p className="footer-copy">{t('homepage.footer.copyright')} <a href="#">@ITEA3 EXPRESS</a></p>
+          <p className="footer-copy">+855 87 327 406 · +855 15 318 880 . +855 95 542 956 · ITEA3@gmail.com</p>
+        </FooterRoad>
       </footer>
 
       <a href="#home" className={`back-top ${backTop ? 'visible' : ''}`} aria-label="Back to top">
