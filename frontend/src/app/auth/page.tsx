@@ -81,14 +81,14 @@ export default function AuthPage() {
           <div className={styles.logoIcon}>
             <Image
               src="/assets/images/logo.png"
-              alt="DomExpress Logo"
+              alt="ITEA3 EXPRESS Logo"
               width={35}
               height={30}
             />
           </div>
 
           <div>
-            <div className={styles.logoName}>DOM EXPRESS</div>
+            <div className={styles.logoName}>ITEA3 EXPRESS</div>
             <div className={styles.logoSub}>{t('auth.platform')}</div>
           </div>
         </div>
@@ -119,12 +119,10 @@ export default function AuthPage() {
             <div className={styles.demoBox}>
               <div className={styles.demoTitle}>Demo Accounts</div>
               {[
-                { role:'Admin',    email:'admin@domexpress.com',  pw:'sok123'  },
-                { role:'Driver1',   email:'driver@domexpress.com', pw:'dara123' },
-                { role:'Driver2',   email:'driver1@domexpress.com', pw:'nang123' },
-                { role:'Customer1', email:'dina123@gmail.com',     pw:'dina123'   },
-                { role:'Customer2', email:'fall@gmail.com',     pw:'fall123'   },
-                { role:'employee', email:'pich.emlopyee@domexpress.com',     pw:'Pich@123'   },
+                { role:'Admin',    email:'admin@itea3express.com',  pw:'admin123'  },
+                { role:'Driver1',   email:'driver@itea3express.com', pw:'driver123' },
+                { role:'Customer1', email:'nii@gmail.com',     pw:'cust123'   },
+                { role:'Customer2', email:'pich.employee@itea3express.com',     pw:'Pich@123'   },
               ].map(d => (
                 <div key={d.role} className={styles.demoRow}>
                   <span className={`${styles.demoRole} ${styles['demoRole'+d.role]}`}>{d.role}</span>
