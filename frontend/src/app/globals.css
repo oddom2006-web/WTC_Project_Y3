@@ -855,3 +855,6 @@ html::before {
 @media (prefers-reduced-motion: reduce) {
   html::before { animation: none; }
 }
+
+/* The footer's bottom bar (road) now runs edge to edge, so remove the bottom padding */
+.home-page .footer { padding-bottom: 0; }
