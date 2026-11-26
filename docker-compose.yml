@@ -6,7 +6,7 @@ services:
       MYSQL_DATABASE: ITEA3express
       MYSQL_USER: ITEA3express
       MYSQL_PASSWORD: ITEA3_express
-      MYSQL_ROOT_PASSWORD: Rupp.oudom.2006
+      MYSQL_ROOT_PASSWORD: 
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
