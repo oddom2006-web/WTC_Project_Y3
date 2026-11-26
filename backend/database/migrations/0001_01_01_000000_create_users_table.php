@@ -12,15 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->id();                       // bigint PK
+            $table->string('username');         // replaces Laravel's default "name"
+            $table->string('email')->unique();  // UK
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->enum('role', ['admin', 'driver', 'customer', 'employee'])->default('customer');
+            $table->string('vehicle')->nullable(); // drivers only
+            $table->string('branch')->nullable();  // drivers/employees only
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });
 
+        // Kept from Laravel's default migration
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
