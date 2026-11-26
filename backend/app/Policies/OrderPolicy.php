@@ -11,12 +11,6 @@ use App\Models\User;
  *   allow create: if isLoggedIn();
  *   allow update: if isLoggedIn();
  *   allow delete: if isAdmin();
- *
- * NOTE: the original rules let *any* logged-in user update *any* order — that's
- * intentionally loose (customers, drivers and admins all call updateOrder()/
- * updateOrderStatus() from different screens). Kept identical here on purpose;
- * tighten later (e.g. restrict drivers to their own assigned orders) if you want
- * stricter behavior than the original app had.
  */
 class OrderPolicy
 {

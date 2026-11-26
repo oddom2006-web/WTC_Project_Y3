@@ -30,8 +30,8 @@ class NotificationController extends Controller
         return response()->json(['unread' => $count]);
     }
 
-    // POST /api/notifications  — any logged-in user may notify another user
-    // (mirrors "allow create: if isLoggedIn();" — used to cross-notify customer/driver)
+    // POST /api/notifications any logged-in user may notify another user
+    // (mirrors "allow create: if isLoggedIn();" used to cross-notify customer/driver)
     public function store(Request $request)
     {
         $this->authorize('create', Notification::class);

@@ -40,7 +40,7 @@ class DriverLocationController extends Controller
         return response()->json(['message' => 'ok']);
     }
 
-    // GET /api/orders/{orderId}/location — initial marker position, so the
+    // GET /api/orders/{orderId}/location initial marker position, so the
     // map has something to show before the first WebSocket push arrives.
     public function show(string $orderId)
     {

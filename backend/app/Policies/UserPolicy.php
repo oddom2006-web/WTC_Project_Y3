@@ -33,7 +33,7 @@ class UserPolicy
         return $actor->isAdmin();
     }
 
-    // Only admins may create *other* accounts (e.g. drivers) via the admin panel.
+    // Only admins may create *other* accounts​​ via the admin panel.
     // Public self-registration is handled separately in AuthController::register.
     public function create(User $actor): bool
     {

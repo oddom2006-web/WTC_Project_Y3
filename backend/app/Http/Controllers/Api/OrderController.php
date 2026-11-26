@@ -10,11 +10,7 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
-    // GET /api/orders?assignedDriver=&customerId=&status=
-    // The original app fetched ALL orders and filtered client-side with a JS
-    // predicate; we keep that working (frontend can still filter locally) but
-    // also accept these query params so drivers/customers don't have to pull
-    // every row in the table.
+
     public function index(Request $request)
     {
         $this->authorize('viewAny', Order::class);
