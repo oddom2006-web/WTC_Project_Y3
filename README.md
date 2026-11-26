@@ -1,4 +1,4 @@
-# DOM EXPRESS — full Docker stack
+# ITEA3 EXPRESS — full Docker stack
 
 Runs Next.js + Laravel (Nginx + PHP-FPM in one container) + MySQL with a
 single `docker compose up`.
